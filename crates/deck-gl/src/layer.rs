@@ -252,6 +252,8 @@ pub struct LayerContext {
     pub terrain: Option<Arc<crate::terrain::TerrainMap>>,
     /// While the deck draws the terrain height map.
     pub terrain_pass: bool,
+    /// While the deck draws the terrain covers, the draped layers through a flat viewport.
+    pub terrain_cover_pass: bool,
 }
 
 /// Attachments of the mask pass: one red channel texture and no depth buffer.
@@ -279,7 +281,13 @@ impl LayerContext {
     /// Depth bias for the current layer: deck.gl's per layer polygon offset plus the base.
     /// Applied through the `layer.depthBias` uniform (see [`update_standard_uniforms`]), not
     /// as pipeline state, so that layers of one type share pipelines.
+    ///
+    /// Zero while drawing a shadow map, as deck.gl's `ShadowPass` sets `depthBias: 0`: the
+    /// shadow map's depths must not include the offset, or layers shadow themselves.
     pub fn depth_bias(&self) -> wgpu::DepthBiasState {
+        if self.shadow_pass.is_some() {
+            return wgpu::DepthBiasState::default();
+        }
         let mut bias = depth_bias_for_layer(self.layer_index);
         bias.constant += self.depth_bias_base;
         bias
@@ -293,6 +301,8 @@ impl LayerContext {
         desc.shadow = self.shadow_enabled && props.shadow_enabled && !props.operation.mask;
         // Ground layers also draw into the terrain height map, which has its own format
         desc.terrain = self.terrain.is_some() && props.operation.terrain;
+        // Draped layers also draw into the terrain covers
+        desc.cover = self.terrain.is_some() && props.extensions.needs_terrain();
         // the depth bias is a uniform, see `depth_bias`
         desc.depth_bias = wgpu::DepthBiasState::default();
         // the collision pass draws layers with their picking pipeline
@@ -574,7 +584,14 @@ pub fn update_standard_uniforms(
     )?;
 
     if model.has_uniforms("lighting") {
-        ctx.lighting.write(model.uniforms("lighting")?)?;
+        let lighting = model.uniforms("lighting")?;
+        ctx.lighting.write(lighting)?;
+        if ctx.shadow_pass.is_some() {
+            // The shadow map stores depth packed into RGBA. Layers that light their color
+            // after DECKGL_FILTER_COLOR (e.g. SimpleMeshLayer) would otherwise scale the
+            // packed depth.
+            lighting.set_i32("enabled", 0)?;
+        }
     }
     if model.has_uniforms("gouraudMaterial") {
         props.material.write(model.uniforms("gouraudMaterial")?)?;

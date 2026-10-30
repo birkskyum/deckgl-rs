@@ -2403,6 +2403,14 @@ fn directional_lights_cast_shadows_onto_the_layers_below() {
     deck.set_lighting(lighting(false));
     let shot = deck.snapshot(None).unwrap();
     assert_eq!(shot.pixel(c + 10, c), plain);
+    // And turning them on once more brings the shadow back
+    deck.set_lighting(lighting(true));
+    let shot = deck.snapshot(None).unwrap();
+    assert_eq!(
+        shot.pixel(c + 10, c),
+        shadowed,
+        "shadows come back after being turned off"
+    );
     // A layer with shadowEnabled false casts nothing
     let mut deck = make_deck(
         &ctx,
@@ -2430,6 +2438,163 @@ fn directional_lights_cast_shadows_onto_the_layers_below() {
         shot.pixel(c + 10, c),
         plain,
         "a layer that casts no shadow leaves the ground alone"
+    );
+}
+
+#[test]
+fn the_shadow_pass_draws_without_polygon_offset() {
+    let Some(ctx) = context() else { return };
+    let deck = make_deck(&ctx, Vec::new());
+    let mut layer_ctx = deck.context().clone();
+    layer_ctx.layer_index = 3 * deck_gl::layer::LAYER_INDEX_STRIDE;
+    layer_ctx.depth_bias_base = -100;
+    assert_ne!(
+        layer_ctx.depth_bias().constant,
+        0,
+        "layers are offset in the main pass"
+    );
+    layer_ctx.shadow_pass = Some(0);
+    assert_eq!(
+        layer_ctx.depth_bias(),
+        wgpu::DepthBiasState::default(),
+        "the shadow map stores depths without the offset"
+    );
+}
+
+#[test]
+fn coplanar_layers_do_not_shadow_themselves_whatever_their_index() {
+    use deck_gl::{AmbientLight, DirectionalLight, LightingEffect};
+    let Some(ctx) = context() else { return };
+    // Coplanar ground tiles, one layer each, about 8 px wide: layers further down the list
+    // have a larger polygon offset, which must not reach the shadow map
+    let tile = 0.0006;
+    let center_of = |i: usize| {
+        [
+            CENTER[0] + ((i % 4) as f64 - 1.5) * tile,
+            CENTER[1] + (0.5 - (i / 4) as f64) * tile,
+        ]
+    };
+    let tiles = || -> Vec<Box<dyn Layer>> {
+        (0..8)
+            .map(|i| {
+                let [x, y] = center_of(i);
+                let r = tile / 2.0;
+                Box::new(SolidPolygonLayer::new(SolidPolygonLayerProps {
+                    base: LayerProps::new(format!("tile-{i}")),
+                    data: LayerData::with_length(1),
+                    get_polygon: Accessor::Constant(vec![vec![
+                        [x - r, y - r, 0.0],
+                        [x + r, y - r, 0.0],
+                        [x + r, y + r, 0.0],
+                        [x - r, y + r, 0.0],
+                    ]]),
+                    get_fill_color: Accessor::Constant([200, 200, 200, 255]),
+                    filled: true,
+                    extruded: false,
+                    ..Default::default()
+                })) as Box<dyn Layer>
+            })
+            .collect()
+    };
+    let lighting = |shadow: bool| LightingEffect {
+        ambient: AmbientLight {
+            color: [255.0, 255.0, 255.0],
+            intensity: 1.0,
+        },
+        directional: vec![DirectionalLight {
+            color: [255.0, 255.0, 255.0],
+            intensity: 1.0,
+            direction: [1.0, -0.5, -1.0],
+            shadow,
+        }],
+        point: Vec::new(),
+        shadow_color: [0.0, 0.0, 0.0, 1.0],
+    };
+    let mut deck = make_deck(&ctx, tiles());
+    deck.set_lighting(lighting(false));
+    let plain = deck.snapshot(None).unwrap();
+    deck.set_lighting(lighting(true));
+    let shot = deck.snapshot(None).unwrap();
+    let viewport = deck.viewport().clone();
+    for i in 0..8 {
+        let [x, y] = center_of(i);
+        let pixel = viewport.project(glam::DVec3::new(x, y, 0.0), true);
+        let (px, py) = (pixel.x.round() as u32, pixel.y.round() as u32);
+        assert_eq!(plain.pixel(px, py)[3], 255, "tile {i} is drawn");
+        assert_eq!(
+            shot.pixel(px, py),
+            plain.pixel(px, py),
+            "tile {i} is not in its own shadow"
+        );
+    }
+}
+
+#[test]
+fn lit_meshes_draw_their_depth_into_the_shadow_map_unlit() {
+    use deck_gl::{AmbientLight, DirectionalLight, LightingEffect};
+    use deck_gl_layers::{Mesh, SimpleMeshLayer, SimpleMeshLayerProps};
+    let Some(ctx) = context() else { return };
+    let d = 0.002;
+    let ground: Box<dyn Layer> = Box::new(SolidPolygonLayer::new(SolidPolygonLayerProps {
+        base: LayerProps {
+            material: Material::unlit(),
+            ..LayerProps::new("ground")
+        },
+        data: LayerData::with_length(1),
+        get_polygon: Accessor::Constant(vec![vec![
+            [CENTER[0] - d, CENTER[1] - d, 0.0],
+            [CENTER[0] + d, CENTER[1] - d, 0.0],
+            [CENTER[0] + d, CENTER[1] + d, 0.0],
+            [CENTER[0] - d, CENTER[1] + d, 0.0],
+        ]]),
+        get_fill_color: Accessor::Constant([255, 255, 255, 255]),
+        filled: true,
+        extruded: false,
+        ..Default::default()
+    }));
+    // SimpleMeshLayer lights its colour after DECKGL_FILTER_COLOR, where the shadow module
+    // writes the packed depth: lit, the stored depth would be scaled and the box would shadow
+    // its own top
+    let cube: Box<dyn Layer> = Box::new(SimpleMeshLayer::new(SimpleMeshLayerProps {
+        base: LayerProps::new("cube"),
+        data: LayerData::with_length(1),
+        mesh: Some(Arc::new(Mesh::cube())),
+        get_position: Accessor::Constant(CENTER),
+        get_color: Accessor::Constant([255, 255, 255, 255]),
+        get_scale: Accessor::Constant([40.0, 40.0, 60.0]),
+        get_translation: Accessor::Constant([0.0, 0.0, 30.0]),
+        ..Default::default()
+    }));
+    let lighting = |shadow: bool| LightingEffect {
+        ambient: AmbientLight {
+            color: [255.0, 255.0, 255.0],
+            intensity: 1.0,
+        },
+        directional: vec![DirectionalLight {
+            color: [255.0, 255.0, 255.0],
+            intensity: 0.0,
+            direction: [1.0, 0.0, -1.0],
+            shadow,
+        }],
+        point: Vec::new(),
+        shadow_color: [0.0, 0.0, 0.0, 1.0],
+    };
+    let mut deck = make_deck(&ctx, vec![ground, cube]);
+    deck.set_lighting(lighting(false));
+    let plain = deck.snapshot(None).unwrap();
+    deck.set_lighting(lighting(true));
+    let shot = deck.snapshot(None).unwrap();
+    let c = SIZE / 2;
+    assert_eq!(
+        shot.pixel(c, c),
+        plain.pixel(c, c),
+        "the top of the box is not in its own shadow"
+    );
+    let ground = plain.pixel(c + 12, c);
+    let shadowed = shot.pixel(c + 12, c);
+    assert!(
+        shadowed[0] < ground[0] - 30,
+        "the box shadows the ground east of it: {shadowed:?} against {ground:?}"
     );
 }
 
@@ -4386,4 +4551,239 @@ fn a_bottom_left_origin_turns_the_frame_over() {
             size - 1 - y
         );
     }
+}
+
+/// The bounding box `[min x, min y, max x, max y]` of the red pixels of a shot, `None` without.
+fn red_extent(shot: &deck_gl::Snapshot) -> Option<[u32; 4]> {
+    let mut extent: Option<[u32; 4]> = None;
+    for y in 0..SIZE {
+        for x in 0..SIZE {
+            let [r, g, b, _] = shot.pixel(x, y);
+            if r > 200 && g < 60 && b < 60 {
+                let e = extent.get_or_insert([x, y, x, y]);
+                *e = [e[0].min(x), e[1].min(y), e[2].max(x), e[3].max(y)];
+            }
+        }
+    }
+    extent
+}
+
+/// A red square drawn over 200 m high ground by the terrain extension's drape mode lands where
+/// a red square placed 200 m up does, on a map and on a globe.
+fn check_drape(view: deck_gl::View) {
+    use deck_gl::Operation;
+    use deck_gl_layers::TerrainExtension;
+    let Some(ctx) = context() else { return };
+    let square = |id: &str, d: f64, z: f64, color: [u8; 4], op: Operation, extensions: Extensions| {
+        Box::new(SolidPolygonLayer::new(SolidPolygonLayerProps {
+            base: LayerProps {
+                operation: op,
+                material: Material::unlit(),
+                extensions,
+                ..LayerProps::new(id)
+            },
+            data: LayerData::with_length(1),
+            get_polygon: Accessor::Constant(vec![vec![
+                [CENTER[0] - d, CENTER[1] - d, z],
+                [CENTER[0] + d, CENTER[1] - d, z],
+                [CENTER[0] + d, CENTER[1] + d, z],
+                [CENTER[0] - d, CENTER[1] + d, z],
+            ]]),
+            get_fill_color: Accessor::Constant(color),
+            filled: true,
+            extruded: false,
+            ..Default::default()
+        })) as Box<dyn Layer>
+    };
+    let gray = [90, 90, 90, 255];
+    let red = [255, 0, 0, 255];
+    let ground = |z, op| square("ground", 0.05, z, gray, op, Extensions::default());
+    let placed = |z| square("red", 0.002, z, red, Operation::DRAW, Extensions::default());
+    let draped = || {
+        square(
+            "red",
+            0.002,
+            0.0,
+            red,
+            Operation::DRAW,
+            Extensions::from_one(TerrainExtension::new()),
+        )
+    };
+    let mut deck = Deck::new(
+        &ctx.device,
+        &ctx.queue,
+        RenderTarget::default(),
+        DeckProps {
+            width: SIZE,
+            height: SIZE,
+            view,
+            // Below zoom 12, where a globe view still draws a globe
+            view_state: ViewState {
+                longitude: CENTER[0],
+                latitude: CENTER[1],
+                zoom: 11.5,
+                pitch: 60.0,
+                bearing: 0.0,
+            },
+            layers: vec![ground(0.0, Operation::DRAW), placed(0.0)],
+            ..Default::default()
+        },
+    )
+    .expect("deck");
+    let mut extent = |layers: Vec<Box<dyn Layer>>| {
+        deck.set_layers(layers);
+        red_extent(&deck.snapshot(None).unwrap())
+    };
+    // Each reference square lies on ground of its own height
+    let at_zero = extent(vec![ground(0.0, Operation::DRAW), placed(0.0)]).expect("the square at 0 m");
+    let at_200 = extent(vec![ground(200.0, Operation::DRAW), placed(200.0)]).expect("the square 200 m up");
+    assert!(
+        at_200[3] + 4 < at_zero[3],
+        "200 m moves the square up the screen: {at_200:?} against {at_zero:?}"
+    );
+    let on_terrain = extent(vec![ground(200.0, Operation::TERRAIN), draped()]).expect("the draped square");
+    for i in 0..4 {
+        assert!(
+            on_terrain[i].abs_diff(at_200[i]) <= 1,
+            "the draped square lies on the ground: {on_terrain:?} against {at_200:?}"
+        );
+    }
+    // A draped layer shows only where there is terrain to show it
+    let small_ground = square(
+        "ground",
+        0.001,
+        0.0,
+        gray,
+        Operation::TERRAIN,
+        Extensions::default(),
+    );
+    let clipped = extent(vec![small_ground, draped()]).expect("the draped square over small ground");
+    let small_square = square("red", 0.001, 0.0, red, Operation::DRAW, Extensions::default());
+    let footprint = extent(vec![ground(0.0, Operation::DRAW), small_square]).expect("the ground's footprint");
+    for i in 0..4 {
+        assert!(
+            clipped[i].abs_diff(footprint[i]) <= 1,
+            "the draped square is cut to the ground: {clipped:?} against {footprint:?}"
+        );
+    }
+    // Draped layers are only drawn onto terrain that is drawn
+    assert_eq!(
+        extent(vec![ground(200.0, Operation::TERRAIN_ONLY), draped()]),
+        None,
+        "nothing to drape over"
+    );
+}
+
+#[test]
+fn the_terrain_extension_drapes_a_layer_over_the_ground() {
+    check_drape(deck_gl::View::default());
+}
+
+#[test]
+fn the_terrain_extension_drapes_a_layer_over_the_ground_on_a_globe() {
+    check_drape(deck_gl::View::Globe(deck_gl::GlobeViewProps::default()));
+}
+
+/// deck.gl's `terrain-extension-drape-fill-globe` case in small: a `TerrainLayer` drawn as
+/// terrain, with a fill draped over it, lands where the fill would at the ground's height.
+fn check_drape_over_terrain_layer(view: deck_gl::View) {
+    use deck_gl::Operation;
+    use deck_gl_layers::{ElevationDecoder, TerrainExtension, TerrainLayer, TerrainLayerProps};
+    let Some(ctx) = context() else { return };
+    // Flat ground 200 m up, blue where nothing is draped over it
+    let elevation = elevation_png(16, |_, _| 200.0);
+    let base = serve_images(elevation, encode_png(1, 1, &[0, 0, 255, 255]));
+    let d = 0.005;
+    let terrain = |operation| -> Box<dyn Layer> {
+        Box::new(TerrainLayer::new(TerrainLayerProps {
+            base: LayerProps {
+                operation,
+                material: Material::unlit(),
+                ..LayerProps::new("terrain")
+            },
+            elevation_data: vec![format!("{base}/elevation.png")],
+            elevation_decoder: ElevationDecoder::terrarium(),
+            mesh_max_error: 10.0,
+            bounds: Some([CENTER[0] - d, CENTER[1] - d, CENTER[0] + d, CENTER[1] + d]),
+            color: [0, 0, 255, 255],
+            ..Default::default()
+        }))
+    };
+    let fill = |z: f64, extensions: Extensions| -> Box<dyn Layer> {
+        let r = 0.002;
+        Box::new(SolidPolygonLayer::new(SolidPolygonLayerProps {
+            base: LayerProps {
+                material: Material::unlit(),
+                extensions,
+                ..LayerProps::new("fill")
+            },
+            data: LayerData::with_length(1),
+            get_polygon: Accessor::Constant(vec![vec![
+                [CENTER[0] - r, CENTER[1] - r, z],
+                [CENTER[0] + r, CENTER[1] - r, z],
+                [CENTER[0] + r, CENTER[1] + r, z],
+                [CENTER[0] - r, CENTER[1] + r, z],
+            ]]),
+            get_fill_color: Accessor::Constant([255, 0, 0, 255]),
+            filled: true,
+            extruded: false,
+            ..Default::default()
+        }))
+    };
+    let mut deck = Deck::new(
+        &ctx.device,
+        &ctx.queue,
+        RenderTarget::default(),
+        DeckProps {
+            width: SIZE,
+            height: SIZE,
+            view,
+            view_state: ViewState {
+                longitude: CENTER[0],
+                latitude: CENTER[1],
+                zoom: 11.5,
+                pitch: 60.0,
+                bearing: 0.0,
+            },
+            // Alone, as the terrain mesh at the same height would hide parts of it
+            layers: vec![fill(200.0, Extensions::default())],
+            ..Default::default()
+        },
+    )
+    .expect("deck");
+    let reference = deck.snapshot(None).unwrap();
+    let placed = red_extent(&reference).expect("the fill placed 200 m up");
+    deck.set_layers(vec![
+        terrain(Operation::TERRAIN),
+        fill(0.0, Extensions::from_one(TerrainExtension::new())),
+    ]);
+    // The first frame loads the image on the calling thread, so one snapshot is enough
+    let shot = deck.snapshot(None).unwrap();
+    let draped = red_extent(&shot).expect("the draped fill");
+    for i in 0..4 {
+        assert!(
+            draped[i].abs_diff(placed[i]) <= 1,
+            "the fill lies on the terrain: {draped:?} against {placed:?}"
+        );
+    }
+    let blue = |shot: &deck_gl::Snapshot| {
+        (0..SIZE * SIZE)
+            .filter(|i| shot.pixel(i % SIZE, i / SIZE) == [0, 0, 255, 255])
+            .count()
+    };
+    assert!(
+        blue(&shot) > 100,
+        "the terrain shows its own colour around the fill"
+    );
+    assert_eq!(shot.pixel(2, SIZE - 2)[3], 0, "and nothing outside its bounds");
+}
+
+#[test]
+fn the_terrain_extension_drapes_a_fill_over_a_terrain_layer() {
+    check_drape_over_terrain_layer(deck_gl::View::default());
+}
+
+#[test]
+fn the_terrain_extension_drapes_a_fill_over_a_terrain_layer_on_a_globe() {
+    check_drape_over_terrain_layer(deck_gl::View::Globe(deck_gl::GlobeViewProps::default()));
 }
