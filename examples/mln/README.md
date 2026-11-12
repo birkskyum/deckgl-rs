@@ -36,15 +36,23 @@ mln-rs is edition 2024 with a 1.98 MSRV, above this repository's own.
 
 ## State
 
-Working: the device is shared, the map renders on it, deck draws into the texture the map
-rendered into, and the composite reads back through mln-rs as one image.
+Working: the device is shared, the map renders on it, deck draws into the texture and the
+depth buffer the map rendered into, and the composite reads back through mln-rs as one
+image.
 
-Not yet working: **interleaving**. With the map's depth attachment bound, every deck
-fragment is rejected, because deck's clip depth range and the map's near and far planes
-disagree. `deckgl_ffi::maplibre_near_far_pixels` already solves exactly this for
-maplibre-native, and mln-rs is a port of that engine, so the same correction should
-apply. Until then `DECKGL_MLN_DEPTH=0` is the honest setting, and the layers paint over
-the basemap rather than being occluded by it.
+Sharing the depth buffer took two corrections, both of which fall out of mln-rs being a
+faithful port. Its `mat4::perspective` is the OpenGL one, writing `(far + near) / (near -
+far)`, so clip z runs `[-1, 1]` and deck needs `ClipDepthRange::NegativeOneToOne`. And its
+far plane is maplibre's `furthest_distance * 1.01`, so `maplibre_near_far_pixels` from the
+FFI crate gives deck the same frustum. Without those, every deck fragment was rejected and
+the layers vanished.
+
+**Not yet demonstrated: occlusion.** The style here is a bare background, which maplibre
+draws with depth `Always` and `ReadOnly`, so the map writes nothing into the depth buffer
+and there is nothing for it to hide. Interleaved and `DECKGL_MLN_DEPTH=0` output is
+byte-identical for this scene. Showing deck's ground circles notched out by 3D buildings,
+the way the maplibre-native GLFW host does, needs a style with `fill-extrusion` and
+therefore vector tiles over the network.
 
 One upstream change is also carried locally for now: `HeadlessFrontend` holds its
 `LocalTarget` privately, so reaching the frame needs a `target()` accessor. It is one
