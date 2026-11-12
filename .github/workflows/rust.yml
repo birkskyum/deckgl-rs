@@ -86,3 +86,24 @@ jobs:
         with:
           name: coverage-lcov
           path: target/lcov.info
+
+  # TEMPORARY probe (branch ci-probe-lavapipe, not for main): name the test that
+  # SIGSEGVs inside lavapipe on ubuntu-26.04, which is why the GPU jobs above are
+  # pinned to 24.04. Single threaded so the crash lands on a named test.
+  lavapipe-probe:
+    name: lavapipe probe (ubuntu-latest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - run: sudo apt-get update && sudo apt-get install -y mesa-vulkan-drivers libvulkan1 vulkan-tools
+      - name: Versions
+        run: |
+          . /etc/os-release && echo "image: $PRETTY_NAME"
+          dpkg -s mesa-vulkan-drivers | grep ^Version
+          vulkaninfo --summary 2>/dev/null | head -30 || true
+      - name: Render tests, one at a time
+        env:
+          RUST_BACKTRACE: 1
+        run: cargo test -p deckgl-rs-layers --test render -- --test-threads=1 --nocapture
