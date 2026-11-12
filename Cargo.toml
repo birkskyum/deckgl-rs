@@ -4,9 +4,9 @@ members = [
   "crates/mathgl-rs",
   "crates/lumagl-rs",
   "crates/deckgl-rs",
-  "crates/deckgl-layers",
-  "crates/deckgl-json",
-  "crates/deckgl-ffi",
+  "crates/deckgl-rs-layers",
+  "crates/deckgl-rs-json",
+  "crates/deckgl-rs-ffi",
   "examples",
 ]
 # Standalone crates, built on their own:
@@ -26,8 +26,8 @@ repository = "https://github.com/birkskyum/deckgl-rs"
 mathgl-rs = { path = "crates/mathgl-rs" }
 lumagl-rs = { path = "crates/lumagl-rs" }
 deckgl-rs = { path = "crates/deckgl-rs" }
-deckgl-layers = { path = "crates/deckgl-layers" }
-deckgl-json = { path = "crates/deckgl-json" }
+deckgl-rs-layers = { path = "crates/deckgl-rs-layers" }
+deckgl-rs-json = { path = "crates/deckgl-rs-json" }
 
 wgpu = "30"
 naga = { version = "30", features = ["wgsl-in", "glsl-out"] }

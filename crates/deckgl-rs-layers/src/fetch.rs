@@ -741,7 +741,7 @@ fn http_get(url: &str, cancel: &CancelToken, max_bytes: usize) -> std::result::R
 #[cfg(not(feature = "fetch"))]
 fn http_get(url: &str, _cancel: &CancelToken, _max_bytes: usize) -> std::result::Result<Vec<u8>, String> {
     Err(format!(
-        "{url}: deckgl-layers was built without the `fetch` feature, so URLs cannot be loaded"
+        "{url}: deckgl-rs-layers was built without the `fetch` feature, so URLs cannot be loaded"
     ))
 }
 

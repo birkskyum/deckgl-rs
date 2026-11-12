@@ -1,12 +1,12 @@
 # Benchmarks
 
-`crates/deckgl-layers/benches/layers.rs` measures, for each of three large layers, the
+`crates/deckgl-rs-layers/benches/layers.rs` measures, for each of three large layers, the
 **upload** (resolving accessors, tessellating, creating the GPU buffers and drawing the first
 frame) and the **frame** (drawing again with everything resident). Both include reading the
 1024 x 1024 frame back to the CPU through `Deck::snapshot`, so real frame times are lower.
 
 ```sh
-cargo bench -p deckgl-layers --bench layers
+cargo bench -p deckgl-rs-layers --bench layers
 ```
 
 Results on an Apple M series laptop (Metal, release build, 2026-09-07 evening). Run to run

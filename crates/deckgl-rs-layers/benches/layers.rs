@@ -1,5 +1,5 @@
 //! Upload and frame times of large layers: a million points, a hundred thousand polygons and
-//! ten thousand paths. Run with `cargo bench -p deckgl-layers --bench layers`; skipped without
+//! ten thousand paths. Run with `cargo bench -p deckgl-rs-layers --bench layers`; skipped without
 //! a GPU adapter.
 
 use std::sync::Arc;

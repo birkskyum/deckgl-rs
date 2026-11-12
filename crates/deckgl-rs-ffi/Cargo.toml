@@ -1,5 +1,5 @@
 [package]
-name = "deckgl-ffi"
+name = "deckgl-rs-ffi"
 description = "C ABI for deckgl-rs: embed deck.gl layers in a host renderer such as maplibre-native"
 version.workspace = true
 edition.workspace = true
@@ -16,8 +16,8 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
 deckgl-rs = { workspace = true, features = ["png"] }
-deckgl-layers = { workspace = true }
-deckgl-json = { workspace = true }
+deckgl-rs-layers = { workspace = true }
+deckgl-rs-json = { workspace = true }
 arrow-array = { workspace = true, features = ["ffi"] }
 arrow-schema = { workspace = true, features = ["ffi"] }
 deckgl-examples = { path = "../../examples" }

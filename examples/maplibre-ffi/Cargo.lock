@@ -807,9 +807,9 @@ dependencies = [
  "arrow-ipc",
  "arrow-schema",
  "arrow-select",
- "deckgl-json",
- "deckgl-layers",
  "deckgl-rs",
+ "deckgl-rs-json",
+ "deckgl-rs-layers",
  "egui",
  "egui-wgpu",
  "egui-winit",
@@ -827,86 +827,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "deckgl-ffi"
-version = "0.1.0"
-dependencies = [
- "arrow-array",
- "arrow-schema",
- "deckgl-examples",
- "deckgl-json",
- "deckgl-layers",
- "deckgl-rs",
- "objc2 0.6.4",
- "objc2-metal 0.3.2",
- "pollster",
- "tracing",
- "tracing-subscriber",
- "wgpu 30.0.1",
-]
-
-[[package]]
-name = "deckgl-json"
-version = "0.1.0"
-dependencies = [
- "arrow-array",
- "arrow-schema",
- "arrow-select",
- "bytes",
- "csv",
- "deckgl-layers",
- "deckgl-rs",
- "flatgeobuf",
- "geozero",
- "glam",
- "image",
- "parquet",
- "serde_json",
- "thiserror 2.0.20",
- "tracing",
- "ureq",
-]
-
-[[package]]
-name = "deckgl-layers"
-version = "0.1.0"
-dependencies = [
- "a5",
- "arrow-array",
- "base64 0.22.1",
- "bytemuck",
- "deckgl-rs",
- "earcutr",
- "flate2",
- "fontdue",
- "glam",
- "gltf",
- "h3o",
- "image",
- "js-sys",
- "lumagl-rs",
- "mathgl-rs",
- "rayon",
- "s2",
- "serde_json",
- "thiserror 2.0.20",
- "tracing",
- "ureq",
- "wasm-bindgen",
- "wasm-bindgen-futures",
- "web-sys",
- "web-time",
- "wgpu 30.0.1",
-]
-
-[[package]]
 name = "deckgl-maplibre-demo"
 version = "0.1.0"
 dependencies = [
  "deckgl-examples",
- "deckgl-ffi",
- "deckgl-json",
- "deckgl-layers",
  "deckgl-rs",
+ "deckgl-rs-ffi",
+ "deckgl-rs-json",
+ "deckgl-rs-layers",
  "image",
  "maplibre-native-ffi",
  "objc2 0.6.4",
@@ -933,6 +861,78 @@ dependencies = [
  "serde_json",
  "thiserror 2.0.20",
  "tracing",
+ "web-time",
+ "wgpu 30.0.1",
+]
+
+[[package]]
+name = "deckgl-rs-ffi"
+version = "0.1.0"
+dependencies = [
+ "arrow-array",
+ "arrow-schema",
+ "deckgl-examples",
+ "deckgl-rs",
+ "deckgl-rs-json",
+ "deckgl-rs-layers",
+ "objc2 0.6.4",
+ "objc2-metal 0.3.2",
+ "pollster",
+ "tracing",
+ "tracing-subscriber",
+ "wgpu 30.0.1",
+]
+
+[[package]]
+name = "deckgl-rs-json"
+version = "0.1.0"
+dependencies = [
+ "arrow-array",
+ "arrow-schema",
+ "arrow-select",
+ "bytes",
+ "csv",
+ "deckgl-rs",
+ "deckgl-rs-layers",
+ "flatgeobuf",
+ "geozero",
+ "glam",
+ "image",
+ "parquet",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tracing",
+ "ureq",
+]
+
+[[package]]
+name = "deckgl-rs-layers"
+version = "0.1.0"
+dependencies = [
+ "a5",
+ "arrow-array",
+ "base64 0.22.1",
+ "bytemuck",
+ "deckgl-rs",
+ "earcutr",
+ "flate2",
+ "fontdue",
+ "glam",
+ "gltf",
+ "h3o",
+ "image",
+ "js-sys",
+ "lumagl-rs",
+ "mathgl-rs",
+ "rayon",
+ "s2",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tracing",
+ "ureq",
+ "wasm-bindgen",
+ "wasm-bindgen-futures",
+ "web-sys",
  "web-time",
  "wgpu 30.0.1",
 ]

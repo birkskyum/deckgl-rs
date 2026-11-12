@@ -101,7 +101,7 @@ API. See [docs/maplibre-native.md](docs/maplibre-native.md).*
 ## Performance
 
 Measured on an Apple M series laptop, release build, including reading the 1024 x 1024 frame
-back to the CPU; `cargo bench -p deckgl-layers --bench layers` and
+back to the CPU; `cargo bench -p deckgl-rs-layers --bench layers` and
 [docs/benchmarks.md](docs/benchmarks.md) have the full table and the method.
 
 | | Upload | Frame |
@@ -125,9 +125,9 @@ hundred small layers initialize in 165 ms rather than 384 ms.
 | `mathgl-rs` | `@math.gl/web-mercator` | Web Mercator projection and camera math, f64 |
 | `lumagl-rs` | `@luma.gl/core`, `@luma.gl/shadertools` | Shader assembly, uniform blocks, textures, `Model`, headless device helpers |
 | `deckgl-rs` | `@deck.gl/core` | `Deck`, `Layer`, `Viewport`, the `project` shader module, Arrow data accessors |
-| `deckgl-layers` | `@deck.gl/layers`, `@deck.gl/aggregation-layers`, `@deck.gl/geo-layers`, `@deck.gl/mesh-layers` | `ScatterplotLayer`, `LineLayer`, `SolidPolygonLayer`, `PathLayer`, `ArcLayer`, `BitmapLayer`, `IconLayer`, `TextLayer`, `ColumnLayer`, `GridCellLayer`, `PointCloudLayer`, `PolygonLayer`, `GeoJsonLayer`, `HexagonLayer`, `GridLayer`, `ScreenGridLayer`, `TripsLayer`, `GreatCircleLayer`, `SimpleMeshLayer`, `ScenegraphLayer` |
-| `deckgl-json` | `@deck.gl/json` | JSON descriptions (pydeck format) with expression accessors |
-| `deckgl-ffi` | `@deck.gl/mapbox` | C API (`libdeckgl_ffi.a`) for host renderers; Metal device and texture interop; JSON layers |
+| `deckgl-rs-layers` | `@deck.gl/layers`, `@deck.gl/aggregation-layers`, `@deck.gl/geo-layers`, `@deck.gl/mesh-layers` | `ScatterplotLayer`, `LineLayer`, `SolidPolygonLayer`, `PathLayer`, `ArcLayer`, `BitmapLayer`, `IconLayer`, `TextLayer`, `ColumnLayer`, `GridCellLayer`, `PointCloudLayer`, `PolygonLayer`, `GeoJsonLayer`, `HexagonLayer`, `GridLayer`, `ScreenGridLayer`, `TripsLayer`, `GreatCircleLayer`, `SimpleMeshLayer`, `ScenegraphLayer` |
+| `deckgl-rs-json` | `@deck.gl/json` | JSON descriptions (pydeck format) with expression accessors |
+| `deckgl-rs-ffi` | `@deck.gl/mapbox` | C API (`libdeckgl_ffi.a`) for host renderers; Metal device and texture interop; JSON layers |
 | `deckgl-examples` | | Example binaries |
 
 The core crates also build for `wasm32-unknown-unknown` against wgpu's WebGPU backend, which

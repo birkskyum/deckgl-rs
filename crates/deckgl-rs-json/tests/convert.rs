@@ -244,7 +244,7 @@ fn geojson_features_are_the_accessor_rows() {
 
 #[test]
 fn loads_data_and_images_relative_to_the_spec_file() {
-    let dir = std::env::temp_dir().join(format!("deckgl-json-{}", std::process::id()));
+    let dir = std::env::temp_dir().join(format!("deckgl-rs-json-{}", std::process::id()));
     std::fs::create_dir_all(&dir).unwrap();
     std::fs::write(
         dir.join("points.json"),
@@ -707,7 +707,7 @@ fn tile_layer_from_a_url_template() {
 
 #[test]
 fn csv_and_ndjson_files_load_as_rows() {
-    let dir = std::env::temp_dir().join(format!("deckgl-json-tabular-{}", std::process::id()));
+    let dir = std::env::temp_dir().join(format!("deckgl-rs-json-tabular-{}", std::process::id()));
     std::fs::create_dir_all(&dir).unwrap();
     std::fs::write(
         dir.join("stops.csv"),

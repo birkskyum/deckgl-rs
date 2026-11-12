@@ -385,13 +385,33 @@ dependencies = [
 ]
 
 [[package]]
-name = "deckgl-json"
+name = "deckgl-rs"
+version = "0.1.0"
+dependencies = [
+ "arrow-array",
+ "arrow-buffer",
+ "arrow-schema",
+ "arrow-select",
+ "bytemuck",
+ "glam",
+ "lumagl-rs",
+ "mathgl-rs",
+ "rayon",
+ "serde_json",
+ "thiserror",
+ "tracing",
+ "web-time",
+ "wgpu",
+]
+
+[[package]]
+name = "deckgl-rs-json"
 version = "0.1.0"
 dependencies = [
  "arrow-array",
  "csv",
- "deckgl-layers",
  "deckgl-rs",
+ "deckgl-rs-layers",
  "glam",
  "image",
  "serde_json",
@@ -401,7 +421,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "deckgl-layers"
+name = "deckgl-rs-layers"
 version = "0.1.0"
 dependencies = [
  "a5",
@@ -431,33 +451,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "deckgl-rs"
-version = "0.1.0"
-dependencies = [
- "arrow-array",
- "arrow-buffer",
- "arrow-schema",
- "arrow-select",
- "bytemuck",
- "glam",
- "lumagl-rs",
- "mathgl-rs",
- "rayon",
- "serde_json",
- "thiserror",
- "tracing",
- "web-time",
- "wgpu",
-]
-
-[[package]]
 name = "deckgl-web"
 version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
- "deckgl-json",
- "deckgl-layers",
  "deckgl-rs",
+ "deckgl-rs-json",
+ "deckgl-rs-layers",
  "js-sys",
  "serde_json",
  "wasm-bindgen",

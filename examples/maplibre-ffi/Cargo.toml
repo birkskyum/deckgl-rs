@@ -12,9 +12,9 @@ description = "deckgl-rs layers drawn into a maplibre-native map through maplibr
 
 [dependencies]
 deckgl-rs = { path = "../../crates/deckgl-rs" }
-deckgl-layers = { path = "../../crates/deckgl-layers" }
-deckgl-json = { path = "../../crates/deckgl-json" }
-deckgl-ffi = { path = "../../crates/deckgl-ffi" }
+deckgl-rs-layers = { path = "../../crates/deckgl-rs-layers" }
+deckgl-rs-json = { path = "../../crates/deckgl-rs-json" }
+deckgl-rs-ffi = { path = "../../crates/deckgl-rs-ffi" }
 deckgl-examples = { path = ".." }
 maplibre-native-ffi = { path = "../../../maplibre-native-ffi/bindings/rust/crates/maplibre-native-ffi", features = ["metal"] }
 wgpu = "30"

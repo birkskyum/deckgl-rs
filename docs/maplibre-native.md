@@ -13,7 +13,7 @@ frame is presented once. No texture copies, no compositing pass.
 
 ## How it works
 
-`crates/deckgl-ffi` builds `libdeckgl_ffi.a` with a small C API (`include/deckgl.h`):
+`crates/deckgl-rs-ffi` builds `libdeckgl_ffi.a` with a small C API (`include/deckgl.h`):
 
 1. `deckgl_metal_create(id<MTLDevice>, id<MTLCommandQueue>)` creates a wgpu device on the
    host's Metal device through wgpu's hal layer, using the host's command queue. Everything

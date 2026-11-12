@@ -55,10 +55,10 @@ jobs:
       # crates need `s2-cells` off (the s2 crate has no wasm build) and `parallel` off (no
       # threads); `fetch` works, loading through the browser's own rather than ureq.
       - run: cargo build --target wasm32-unknown-unknown -p mathgl-rs -p lumagl-rs -p deckgl-rs
-      - run: cargo build --target wasm32-unknown-unknown -p deckgl-layers --no-default-features
-      - run: cargo build --target wasm32-unknown-unknown -p deckgl-json --no-default-features
+      - run: cargo build --target wasm32-unknown-unknown -p deckgl-rs-layers --no-default-features
+      - run: cargo build --target wasm32-unknown-unknown -p deckgl-rs-json --no-default-features
       # With `fetch` the loading goes through the browser's own, so no ureq and no threads
-      - run: cargo build --target wasm32-unknown-unknown -p deckgl-json --no-default-features --features fetch
+      - run: cargo build --target wasm32-unknown-unknown -p deckgl-rs-json --no-default-features --features fetch
       # The browser example, on both backends
       - run: cargo build --target wasm32-unknown-unknown
         working-directory: examples/web

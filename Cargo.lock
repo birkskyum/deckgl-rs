@@ -812,9 +812,9 @@ dependencies = [
  "arrow-ipc",
  "arrow-schema",
  "arrow-select",
- "deckgl-json",
- "deckgl-layers",
  "deckgl-rs",
+ "deckgl-rs-json",
+ "deckgl-rs-layers",
  "egui",
  "egui-wgpu",
  "egui-winit",
@@ -832,15 +832,36 @@ dependencies = [
 ]
 
 [[package]]
-name = "deckgl-ffi"
+name = "deckgl-rs"
+version = "0.1.0"
+dependencies = [
+ "arrow-array",
+ "arrow-buffer",
+ "arrow-schema",
+ "arrow-select",
+ "bytemuck",
+ "glam",
+ "image",
+ "lumagl-rs",
+ "mathgl-rs",
+ "rayon",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tracing",
+ "web-time",
+ "wgpu 30.0.1",
+]
+
+[[package]]
+name = "deckgl-rs-ffi"
 version = "0.1.0"
 dependencies = [
  "arrow-array",
  "arrow-schema",
  "deckgl-examples",
- "deckgl-json",
- "deckgl-layers",
  "deckgl-rs",
+ "deckgl-rs-json",
+ "deckgl-rs-layers",
  "image",
  "objc2 0.6.4",
  "objc2-metal 0.3.2",
@@ -851,7 +872,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "deckgl-json"
+name = "deckgl-rs-json"
 version = "0.1.0"
 dependencies = [
  "a5",
@@ -860,8 +881,8 @@ dependencies = [
  "arrow-select",
  "bytes",
  "csv",
- "deckgl-layers",
  "deckgl-rs",
+ "deckgl-rs-layers",
  "flatgeobuf",
  "geozero",
  "glam",
@@ -876,7 +897,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "deckgl-layers"
+name = "deckgl-rs-layers"
 version = "0.1.0"
 dependencies = [
  "a5",
@@ -905,27 +926,6 @@ dependencies = [
  "wasm-bindgen",
  "wasm-bindgen-futures",
  "web-sys",
- "web-time",
- "wgpu 30.0.1",
-]
-
-[[package]]
-name = "deckgl-rs"
-version = "0.1.0"
-dependencies = [
- "arrow-array",
- "arrow-buffer",
- "arrow-schema",
- "arrow-select",
- "bytemuck",
- "glam",
- "image",
- "lumagl-rs",
- "mathgl-rs",
- "rayon",
- "serde_json",
- "thiserror 2.0.20",
- "tracing",
  "web-time",
  "wgpu 30.0.1",
 ]

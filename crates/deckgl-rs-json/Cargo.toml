@@ -1,5 +1,5 @@
 [package]
-name = "deckgl-json"
+name = "deckgl-rs-json"
 description = "JSON layer descriptions for deckgl-rs, compatible with @deck.gl/json and pydeck"
 version.workspace = true
 edition.workspace = true
@@ -8,25 +8,28 @@ license.workspace = true
 authors.workspace = true
 repository.workspace = true
 
+[lib]
+name = "deckgl_json"
+
 [features]
 default = ["fetch", "parquet", "flatgeobuf", "s2-cells", "parallel"]
 # Spread tessellation over the cores with rayon, see `deckgl-rs`.
-parallel = ["deckgl-layers/parallel"]
+parallel = ["deckgl-rs-layers/parallel"]
 # Load `data`, `image` and `iconAtlas` props from http(s) URLs.
-fetch = ["dep:ureq", "deckgl-layers/fetch"]
+fetch = ["dep:ureq", "deckgl-rs-layers/fetch"]
 # `data` from Parquet and GeoParquet files.
 parquet = ["dep:parquet", "dep:arrow-select", "dep:bytes", "dep:arrow-schema"]
 # `data` from FlatGeobuf files.
 flatgeobuf = ["dep:flatgeobuf", "dep:geozero"]
-# S2 cells in the geo cell layers; off in a wasm build, see `deckgl-layers`.
-s2-cells = ["deckgl-layers/s2-cells"]
+# S2 cells in the geo cell layers; off in a wasm build, see `deckgl-rs-layers`.
+s2-cells = ["deckgl-rs-layers/s2-cells"]
 # Draw through wgpu's WebGL2 backend, see `lumagl-rs`.
-webgl = ["deckgl-layers/webgl"]
+webgl = ["deckgl-rs-layers/webgl"]
 
 [dependencies]
 tracing = { workspace = true }
 deckgl-rs = { workspace = true }
-deckgl-layers = { path = "../deckgl-layers", default-features = false }
+deckgl-rs-layers = { path = "../deckgl-rs-layers", default-features = false }
 arrow-array = { workspace = true }
 arrow-schema = { workspace = true, optional = true }
 glam = { workspace = true }
