@@ -1,12 +1,12 @@
 [workspace]
 resolver = "2"
 members = [
-  "crates/math-gl",
-  "crates/luma-gl",
-  "crates/deck-gl",
-  "crates/deck-gl-layers",
-  "crates/deck-gl-json",
-  "crates/deck-gl-ffi",
+  "crates/mathgl-rs",
+  "crates/lumagl-rs",
+  "crates/deckgl-rs",
+  "crates/deckgl-layers",
+  "crates/deckgl-json",
+  "crates/deckgl-ffi",
   "examples",
 ]
 # Standalone crates, built on their own:
@@ -20,14 +20,14 @@ edition = "2021"
 rust-version = "1.87"
 license = "MIT OR Apache-2.0"
 authors = ["Birk Skyum"]
-repository = "https://github.com/birkskyum/deck.gl-native"
+repository = "https://github.com/birkskyum/deckgl-rs"
 
 [workspace.dependencies]
-math-gl = { path = "crates/math-gl" }
-luma-gl = { path = "crates/luma-gl" }
-deck-gl = { path = "crates/deck-gl" }
-deck-gl-layers = { path = "crates/deck-gl-layers" }
-deck-gl-json = { path = "crates/deck-gl-json" }
+mathgl-rs = { path = "crates/mathgl-rs" }
+lumagl-rs = { path = "crates/lumagl-rs" }
+deckgl-rs = { path = "crates/deckgl-rs" }
+deckgl-layers = { path = "crates/deckgl-layers" }
+deckgl-json = { path = "crates/deckgl-json" }
 
 wgpu = "30"
 naga = { version = "30", features = ["wgsl-in", "glsl-out"] }

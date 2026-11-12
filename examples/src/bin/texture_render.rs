@@ -5,13 +5,13 @@
 
 use std::error::Error;
 
-use deck_gl::luma_gl::device::create_headless_context;
-use deck_gl::luma_gl::RenderTarget;
-use deck_gl::{Deck, DeckProps};
-use deck_gl_examples::{scene, spec};
+use deckgl::lumagl::device::create_headless_context;
+use deckgl::lumagl::RenderTarget;
+use deckgl::{Deck, DeckProps};
+use deckgl_examples::{scene, spec};
 
 fn main() -> Result<(), Box<dyn Error>> {
-    deck_gl_examples::init_logging();
+    deckgl_examples::init_logging();
     let output = std::env::args()
         .nth(1)
         .unwrap_or_else(|| "target/texture-render.png".to_string());

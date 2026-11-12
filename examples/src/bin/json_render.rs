@@ -4,14 +4,14 @@
 
 use std::error::Error;
 
-use deck_gl::luma_gl::device::create_headless_context;
-use deck_gl::luma_gl::RenderTarget;
-use deck_gl::{Deck, DeckProps};
-use deck_gl_examples::{scene, spec};
-use deck_gl_json::JsonConverter;
+use deckgl::lumagl::device::create_headless_context;
+use deckgl::lumagl::RenderTarget;
+use deckgl::{Deck, DeckProps};
+use deckgl_examples::{scene, spec};
+use deckgl_json::JsonConverter;
 
 fn main() -> Result<(), Box<dyn Error>> {
-    deck_gl_examples::init_logging();
+    deckgl_examples::init_logging();
     let mut args = std::env::args().skip(1);
     let Some(spec) = args.next() else {
         eprintln!("usage: json_render <spec.json> [output.png] [WIDTHxHEIGHT]");
@@ -67,7 +67,7 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     // Tiles and remote data load in the background: keep rendering until nothing is on its
     // way any more, so tiled descriptions come out with their content
-    let fetcher = deck_gl_layers::Fetcher::global();
+    let fetcher = deckgl_layers::Fetcher::global();
     let deadline = std::time::Instant::now() + std::time::Duration::from_secs(30);
     let mut generation = u64::MAX;
     let mut snapshot = deck.snapshot(Some(scene::CLEAR_COLOR))?;

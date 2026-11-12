@@ -12,10 +12,10 @@ use std::error::Error;
 use std::sync::Arc;
 use std::time::Instant;
 
-use deck_gl::luma_gl::device::{create_headless_context, create_render_texture, read_texture_rgba8};
-use deck_gl::luma_gl::RenderTarget;
-use deck_gl::{Accessor, Deck, DeckProps, FeatureCollection, LayerProps, Unit, ViewState};
-use deck_gl_layers::{GeoJsonLayer, GeoJsonLayerProps};
+use deckgl::lumagl::device::{create_headless_context, create_render_texture, read_texture_rgba8};
+use deckgl::lumagl::RenderTarget;
+use deckgl::{Accessor, Deck, DeckProps, FeatureCollection, LayerProps, Unit, ViewState};
+use deckgl_layers::{GeoJsonLayer, GeoJsonLayerProps};
 
 /// deck.gl's GeoJsonLayer example threshold scale for the `growth` property
 fn color_scale(growth: f64) -> [u8; 4] {

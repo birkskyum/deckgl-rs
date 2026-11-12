@@ -6,13 +6,13 @@ index 68a1328a53ba..af29ad8ca04a 100644
      )
  endif()
  
-+option(MLN_DECKGL_OVERLAY "Draw a deck.gl-native overlay in the GLFW app (Metal backend only)" OFF)
++option(MLN_DECKGL_OVERLAY "Draw a deckgl-rs overlay in the GLFW app (Metal backend only)" OFF)
 +if(MLN_DECKGL_OVERLAY)
 +    if(NOT MLN_WITH_METAL)
 +        message(FATAL_ERROR "MLN_DECKGL_OVERLAY requires MLN_WITH_METAL")
 +    endif()
 +    if(NOT DECKGL_FFI_LIB OR NOT DECKGL_FFI_INCLUDE)
-+        message(FATAL_ERROR "MLN_DECKGL_OVERLAY requires DECKGL_FFI_LIB (path to libdeckgl.a) and DECKGL_FFI_INCLUDE (directory containing deckgl.h)")
++        message(FATAL_ERROR "MLN_DECKGL_OVERLAY requires DECKGL_FFI_LIB (path to libdeckgl_ffi.a) and DECKGL_FFI_INCLUDE (directory containing deckgl.h)")
 +    endif()
 +    target_sources(
 +        mbgl-glfw

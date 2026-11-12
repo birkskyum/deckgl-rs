@@ -7,8 +7,8 @@ set -eu
 cd "$(dirname "$0")"
 
 case "${1:-webgpu}" in
-  webgpu) features=""; name="deck_gl_web" ;;
-  webgl)  features="--features webgl"; name="deck_gl_web_gl" ;;
+  webgpu) features=""; name="deckgl_web" ;;
+  webgl)  features="--features webgl"; name="deckgl_web_gl" ;;
   *) echo "usage: $0 [webgpu|webgl]" >&2; exit 2 ;;
 esac
 
@@ -20,7 +20,7 @@ done
 
 # shellcheck disable=SC2086
 cargo build --release --target wasm32-unknown-unknown $features
-"${WASM_BINDGEN:-wasm-bindgen}" target/wasm32-unknown-unknown/release/deck_gl_web.wasm \
+"${WASM_BINDGEN:-wasm-bindgen}" target/wasm32-unknown-unknown/release/deckgl_web.wasm \
   --out-dir www/pkg --out-name "$name" --target web --no-typescript
 
 ls -lh "www/pkg/${name}_bg.wasm" | awk '{print $9, $5}'

@@ -1,5 +1,5 @@
 ---
-title: deck.gl-native
+title: deckgl-rs
 description: A native implementation of deck.gl for native hardware, in Rust on wgpu.
 template: splash
 hero:
@@ -10,13 +10,13 @@ hero:
     file: ../../assets/texture-render.png
   actions:
     - text: Gallery
-      link: /deck.gl-native/gallery/
+      link: /deckgl-rs/gallery/
       icon: right-arrow
     - text: Design notes
-      link: /deck.gl-native/docs/rust-port/
+      link: /deckgl-rs/docs/rust-port/
       variant: minimal
     - text: GitHub
-      link: https://github.com/birkskyum/deck.gl-native
+      link: https://github.com/birkskyum/deckgl-rs
       icon: external
       variant: minimal
 ---
@@ -49,15 +49,15 @@ import { Card, CardGrid } from '@astrojs/starlight/components'
 ## Getting started
 
 ```sh
-git clone https://github.com/birkskyum/deck.gl-native
-cd deck.gl-native
+git clone https://github.com/birkskyum/deckgl-rs
+cd deckgl-rs
 cargo run --release --bin window          # the example scene, in a window
 cargo run --release --bin json_render -- examples/json/shadows.json out.png
 ```
 
 ```rust
-use deck_gl::{Accessor, Deck, DeckProps, LayerData, LayerProps, ViewState};
-use deck_gl_layers::{ScatterplotLayer, ScatterplotLayerProps};
+use deckgl::{Accessor, Deck, DeckProps, LayerData, LayerProps, ViewState};
+use deckgl_layers::{ScatterplotLayer, ScatterplotLayerProps};
 
 let layer = ScatterplotLayer::new(ScatterplotLayerProps {
     base: LayerProps::new("points"),

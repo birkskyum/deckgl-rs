@@ -1,6 +1,6 @@
 # JSON descriptions
 
-`deck-gl-json` reads the JSON format of [`@deck.gl/json`](https://deck.gl/docs/api-reference/json/overview)
+`deckgl-json` reads the JSON format of [`@deck.gl/json`](https://deck.gl/docs/api-reference/json/overview)
 and [pydeck](https://pydeck.gl): a description with `initialViewState` and `layers`, where each
 layer names its class with `@@type` and uses deck.gl's camelCase props. Descriptions written for
 deck.gl's JSON playground or exported from pydeck work unchanged as long as the layers exist here.
@@ -25,7 +25,7 @@ deck.gl's JSON playground or exported from pydeck work unchanged as long as the 
 ## Using it
 
 ```rust
-let json = deck_gl_json::JsonConverter::parse_file("scene.json")?;
+let json = deckgl_json::JsonConverter::parse_file("scene.json")?;
 for warning in &json.warnings {
     eprintln!("{warning}");            // unknown layer types and props, like deck.gl's console warnings
 }
@@ -67,7 +67,7 @@ extension; a header row names the fields and cells become numbers, booleans, `nu
 newline delimited JSON (`.ndjson`, `.jsonl`). URLs need the crate's default `fetch` feature. `image` (BitmapLayer) and `iconAtlas` (IconLayer) are PNG or JPEG files or URLs, and
 `iconMapping` is an inline object or a JSON file.
 
-URLs load through `deck_gl_layers::Fetcher`, a thread pool with an in memory cache that
+URLs load through `deckgl_layers::Fetcher`, a thread pool with an in memory cache that
 requests each URL once however many layers name it. `JsonConverter` blocks on them by default.
 Give `ConvertOptions::fetcher` a fetcher and `convert` returns at once instead: layers whose
 data is on its way are left out and their URLs listed in `JsonDeck::pending`, so a frame loop
@@ -83,7 +83,7 @@ they are, and every other layer sees one row per feature with `geometry` and `pr
 for its accessors (`"getPosition": "@@=geometry.coordinates"`). Geometries are decoded from
 WKB, with Z and M coordinates and EWKB SRIDs accepted. A Parquet file without GeoParquet
 metadata is an Arrow table, read with `@@column:` accessors like the named tables below. The
-`parquet` and `flatgeobuf` cargo features of `deck-gl-json` (on by default) provide this.
+`parquet` and `flatgeobuf` cargo features of `deckgl-json` (on by default) provide this.
 
 A geometry column of multi geometries (`geoarrow.multipoint`, `geoarrow.multilinestring`,
 `geoarrow.multipolygon`, or WKB holding them) becomes one row per part, as
@@ -96,11 +96,11 @@ row.
 Large data should not go through JSON. A converter can carry named Arrow record batches, and
 a layer uses one with `"data": "@@table:<name>"`. Accessors on table data name columns:
 `"@@column:geometry"`, or just `"@@=geometry"`; expressions are not evaluated over tables.
-Column types follow `deck-gl`'s Arrow accessors: positions are `FixedSizeList<f64, 2 | 3>`,
+Column types follow `deckgl-rs`'s Arrow accessors: positions are `FixedSizeList<f64, 2 | 3>`,
 colours `FixedSizeList<u8, 3 | 4>`, numbers any numeric type, strings `Utf8`.
 
 ```rust
-let converter = deck_gl_json::JsonConverter::new().with_table("points", record_batch);
+let converter = deckgl_json::JsonConverter::new().with_table("points", record_batch);
 ```
 
 Over the C API the table crosses the [Arrow C Data Interface](https://arrow.apache.org/docs/format/CDataInterface.html)

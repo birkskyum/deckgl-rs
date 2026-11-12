@@ -10,17 +10,17 @@
 //! The camera is not taken from maplibre's matrix but rebuilt from its centre, zoom, pitch
 //! and bearing by deck.gl's own projection, the same way the maplibre-native host works.
 
-use deck_gl::luma_gl::RenderTarget;
-use deck_gl::viewport::{Viewport, WebMercatorViewportOptions};
-use deck_gl::{Deck, DeckProps};
-use deck_gl_json::JsonConverter;
+use deckgl::lumagl::RenderTarget;
+use deckgl::viewport::{Viewport, WebMercatorViewportOptions};
+use deckgl::{Deck, DeckProps};
+use deckgl_json::JsonConverter;
 use wasm_bindgen::prelude::*;
 use wasm_bindgen::JsCast;
 use web_sys::WebGl2RenderingContext;
 
 use crate::err;
 
-/// deck.gl-native drawing inside a maplibre-gl-js map, in the map's own WebGL2 context.
+/// deckgl-rs drawing inside a maplibre-gl-js map, in the map's own WebGL2 context.
 #[wasm_bindgen]
 pub struct DeckGlOverlay {
     device: wgpu::Device,
@@ -55,7 +55,7 @@ pub async fn create_overlay(gl: WebGl2RenderingContext) -> Result<DeckGlOverlay,
     let adapter = unsafe { instance.create_adapter_from_hal(exposed) };
     let (device, queue) = adapter
         .request_device(&wgpu::DeviceDescriptor {
-            label: Some("deck.gl-native in maplibre-gl-js"),
+            label: Some("deckgl-rs in maplibre-gl-js"),
             required_limits: adapter.limits(),
             ..Default::default()
         })
@@ -82,7 +82,7 @@ pub async fn create_overlay(gl: WebGl2RenderingContext) -> Result<DeckGlOverlay,
             constant_attributes: false,
             // A canvas' default framebuffer starts at the bottom left, so the layers go in
             // the other way up from how wgpu would draw them into a texture of its own
-            clip_origin: deck_gl::ClipOrigin::BottomLeft,
+            clip_origin: deckgl::ClipOrigin::BottomLeft,
             ..Default::default()
         },
     )
@@ -139,7 +139,7 @@ impl DeckGlOverlay {
         near_z: f64,
         far_z: f64,
     ) -> Result<(), JsValue> {
-        let generation = deck_gl_layers::fetch::Fetcher::global().generation();
+        let generation = deckgl_layers::fetch::Fetcher::global().generation();
         if generation != self.converted_at && self.spec.is_some() {
             self.convert()?;
         }
@@ -261,7 +261,7 @@ impl DeckGlOverlay {
         let Some(value) = &self.spec else {
             return Ok(());
         };
-        self.converted_at = deck_gl_layers::fetch::Fetcher::global().generation();
+        self.converted_at = deckgl_layers::fetch::Fetcher::global().generation();
         let converted = JsonConverter::new().convert(value).map_err(err)?;
         self.warnings = converted.warnings;
         if let Some(lighting) = converted.lighting {

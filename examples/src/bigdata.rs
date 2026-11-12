@@ -8,9 +8,9 @@ use std::error::Error;
 use std::path::Path;
 
 use arrow_array::RecordBatch;
-use deck_gl::{Accessor, Layer, LayerData, LayerProps, Unit};
-use deck_gl_layers::aggregation::AggregationProps;
-use deck_gl_layers::{
+use deckgl::{Accessor, Layer, LayerData, LayerProps, Unit};
+use deckgl_layers::aggregation::AggregationProps;
+use deckgl_layers::{
     HexagonLayer, HexagonLayerProps, ScatterplotLayer, ScatterplotLayerProps, SolidPolygonLayer,
     SolidPolygonLayerProps,
 };
@@ -32,7 +32,7 @@ fn extension(path: &str) -> String {
 pub fn read_batch(path: &str) -> Result<RecordBatch, Box<dyn Error>> {
     let bytes = std::fs::read(path)?;
     match extension(path).as_str() {
-        "parquet" => Ok(deck_gl_json::geo::read_parquet(bytes)?),
+        "parquet" => Ok(deckgl_json::geo::read_parquet(bytes)?),
         "arrow" | "ipc" | "feather" => {
             let reader = arrow_ipc::reader::FileReader::try_new(std::io::Cursor::new(bytes), None)?;
             let schema = reader.schema();
@@ -45,7 +45,7 @@ pub fn read_batch(path: &str) -> Result<RecordBatch, Box<dyn Error>> {
 
 /// The geometry column of a batch: what GeoParquet names, or the first that looks like one.
 pub fn geometry_column(batch: &RecordBatch) -> Option<String> {
-    if let Some((column, _)) = deck_gl_json::geo::geoparquet_column(batch.schema_ref()) {
+    if let Some((column, _)) = deckgl_json::geo::geoparquet_column(batch.schema_ref()) {
         if batch.schema_ref().column_with_name(&column).is_some() {
             return Some(column);
         }

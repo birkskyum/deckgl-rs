@@ -800,44 +800,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f27ae1dd37df86211c42e150270f82743308803d90a6f6e6651cd730d5e1732f"
 
 [[package]]
-name = "deck-gl"
-version = "0.1.0"
-dependencies = [
- "arrow-array",
- "arrow-buffer",
- "arrow-schema",
- "arrow-select",
- "bytemuck",
- "glam",
- "image",
- "luma-gl",
- "math-gl",
- "rayon",
- "serde_json",
- "thiserror 2.0.20",
- "tracing",
- "web-time",
- "wgpu 30.0.1",
-]
-
-[[package]]
-name = "deck-gl-examples"
+name = "deckgl-examples"
 version = "0.1.0"
 dependencies = [
  "arrow-array",
  "arrow-ipc",
  "arrow-schema",
  "arrow-select",
- "deck-gl",
- "deck-gl-json",
- "deck-gl-layers",
+ "deckgl-json",
+ "deckgl-layers",
+ "deckgl-rs",
  "egui",
  "egui-wgpu",
  "egui-winit",
  "glam",
  "image",
- "luma-gl",
- "math-gl",
+ "lumagl-rs",
+ "mathgl-rs",
  "pollster",
  "serde",
  "serde_json",
@@ -848,15 +827,15 @@ dependencies = [
 ]
 
 [[package]]
-name = "deck-gl-ffi"
+name = "deckgl-ffi"
 version = "0.1.0"
 dependencies = [
  "arrow-array",
  "arrow-schema",
- "deck-gl",
- "deck-gl-examples",
- "deck-gl-json",
- "deck-gl-layers",
+ "deckgl-examples",
+ "deckgl-json",
+ "deckgl-layers",
+ "deckgl-rs",
  "objc2 0.6.4",
  "objc2-metal 0.3.2",
  "pollster",
@@ -866,7 +845,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "deck-gl-json"
+name = "deckgl-json"
 version = "0.1.0"
 dependencies = [
  "arrow-array",
@@ -874,8 +853,8 @@ dependencies = [
  "arrow-select",
  "bytes",
  "csv",
- "deck-gl",
- "deck-gl-layers",
+ "deckgl-layers",
+ "deckgl-rs",
  "flatgeobuf",
  "geozero",
  "glam",
@@ -888,14 +867,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "deck-gl-layers"
+name = "deckgl-layers"
 version = "0.1.0"
 dependencies = [
  "a5",
  "arrow-array",
  "base64 0.22.1",
  "bytemuck",
- "deck-gl",
+ "deckgl-rs",
  "earcutr",
  "flate2",
  "fontdue",
@@ -904,8 +883,8 @@ dependencies = [
  "h3o",
  "image",
  "js-sys",
- "luma-gl",
- "math-gl",
+ "lumagl-rs",
+ "mathgl-rs",
  "rayon",
  "s2",
  "serde_json",
@@ -920,14 +899,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "deck-gl-maplibre-demo"
+name = "deckgl-maplibre-demo"
 version = "0.1.0"
 dependencies = [
- "deck-gl",
- "deck-gl-examples",
- "deck-gl-ffi",
- "deck-gl-json",
- "deck-gl-layers",
+ "deckgl-examples",
+ "deckgl-ffi",
+ "deckgl-json",
+ "deckgl-layers",
+ "deckgl-rs",
  "image",
  "maplibre-native-ffi",
  "objc2 0.6.4",
@@ -935,6 +914,27 @@ dependencies = [
  "pollster",
  "wgpu 30.0.1",
  "winit",
+]
+
+[[package]]
+name = "deckgl-rs"
+version = "0.1.0"
+dependencies = [
+ "arrow-array",
+ "arrow-buffer",
+ "arrow-schema",
+ "arrow-select",
+ "bytemuck",
+ "glam",
+ "image",
+ "lumagl-rs",
+ "mathgl-rs",
+ "rayon",
+ "serde_json",
+ "thiserror 2.0.20",
+ "tracing",
+ "web-time",
+ "wgpu 30.0.1",
 ]
 
 [[package]]
@@ -2185,7 +2185,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f9f8bd3e56ce4dfc153cf470fffbfa98c7620958b312ca5c3a4b8d5181fd13c6"
 
 [[package]]
-name = "luma-gl"
+name = "lumagl-rs"
 version = "0.1.0"
 dependencies = [
  "bytemuck",
@@ -2259,7 +2259,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "math-gl"
+name = "mathgl-rs"
 version = "0.1.0"
 dependencies = [
  "glam",

@@ -9,13 +9,13 @@
 use std::sync::Arc;
 use std::time::Instant;
 
-use deck_gl::luma_gl::device::create_render_texture;
-use deck_gl::luma_gl::RenderTarget;
-use deck_gl::{
+use deckgl::lumagl::device::create_render_texture;
+use deckgl::lumagl::RenderTarget;
+use deckgl::{
     ClickCallback, Deck, DeckProps, GlobeController, HoverCallback, MapController, OrbitController, ViewState,
 };
-use deck_gl_examples::{scene, spec};
-use deck_gl_layers::TripsLayer;
+use deckgl_examples::{scene, spec};
+use deckgl_layers::TripsLayer;
 use winit::application::ApplicationHandler;
 use winit::event::{ElementState, MouseButton, MouseScrollDelta, WindowEvent};
 use winit::event_loop::{ActiveEventLoop, ControlFlow, EventLoop};
@@ -58,7 +58,7 @@ impl State {
         }))
         .expect("adapter");
         let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor {
-            label: Some("deck.gl-native window"),
+            label: Some("deckgl-rs window"),
             ..Default::default()
         }))
         .expect("device");
@@ -123,9 +123,9 @@ impl State {
             deck.set_any_view_state(camera);
         }
         spec::apply_views(&mut deck, &loaded.views, &loaded.cameras);
-        let map_view = matches!(loaded.view, deck_gl::View::Map);
+        let map_view = matches!(loaded.view, deckgl::View::Map);
         let orbit = match loaded.view {
-            deck_gl::View::Orbit(_) | deck_gl::View::Orthographic(_) => Some(OrbitController::new(
+            deckgl::View::Orbit(_) | deckgl::View::Orthographic(_) => Some(OrbitController::new(
                 loaded.view,
                 loaded.camera.unwrap_or_else(|| loaded.view.default_view_state()),
                 config.width as f64 / scale as f64,
@@ -134,7 +134,7 @@ impl State {
             _ => None,
         };
         let globe = match loaded.view {
-            deck_gl::View::Globe(props) => Some(GlobeController::new(
+            deckgl::View::Globe(props) => Some(GlobeController::new(
                 props,
                 loaded.camera.and_then(|c| c.map()).unwrap_or(base_view),
                 config.width as f64 / scale as f64,
@@ -430,7 +430,7 @@ impl ApplicationHandler for App {
             return;
         }
         let attributes = Window::default_attributes()
-            .with_title("deck.gl-native")
+            .with_title("deckgl-rs")
             .with_inner_size(winit::dpi::LogicalSize::new(1024, 768));
         let window = Arc::new(event_loop.create_window(attributes).expect("window"));
         self.state = Some(State::new(window));
@@ -506,7 +506,7 @@ impl ApplicationHandler for App {
 }
 
 fn main() {
-    deck_gl_examples::init_logging();
+    deckgl_examples::init_logging();
     let event_loop = EventLoop::new().expect("event loop");
     event_loop.set_control_flow(ControlFlow::Poll);
     let mut app = App::default();

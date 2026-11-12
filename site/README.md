@@ -1,12 +1,12 @@
-# The deck.gl-native site
+# The deckgl-rs site
 
 An [Astro](https://astro.build) and [Starlight](https://starlight.astro.build) site, published
-to <https://birkskyum.github.io/deck.gl-native/> by `.github/workflows/site.yml` whenever
+to <https://birkskyum.github.io/deckgl-rs/> by `.github/workflows/site.yml` whenever
 `site/` or `docs/` changes on `main`.
 
 ```sh
 npm install
-npm run dev       # http://localhost:4321/deck.gl-native/
+npm run dev       # http://localhost:4321/deckgl-rs/
 npm run build     # into dist/
 npm run preview   # serve what was built
 ```

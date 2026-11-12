@@ -1,19 +1,19 @@
-# deck.gl-native inside maplibre-native
+# deckgl-rs inside maplibre-native
 
-![deck.gl-native arcs weaving through maplibre-native's 3D buildings](images/maplibre-interleaved.png)
+![deckgl-rs arcs weaving through maplibre-native's 3D buildings](images/maplibre-interleaved.png)
 
-*The maplibre-native GLFW demo app (Metal, OpenFreeMap Liberty style) with deck.gl-native arcs
+*The maplibre-native GLFW demo app (Metal, OpenFreeMap Liberty style) with deckgl-rs arcs
 drawn into the same frame. The arcs share the map's depth buffer, so each one is hidden where
 it passes behind a building and visible where it clears one. The scene is
 `examples/json/maplibre-arcs.json`, shown with `DECKGL_JSON`.*
 
-This is the interleaved rendering path: maplibre-native draws the map, deck.gl-native draws its
+This is the interleaved rendering path: maplibre-native draws the map, deckgl-rs draws its
 layers into the same drawable and depth texture, on the same Metal command queue, and the
 frame is presented once. No texture copies, no compositing pass.
 
 ## How it works
 
-`crates/deck-gl-ffi` builds `libdeckgl.a` with a small C API (`include/deckgl.h`):
+`crates/deckgl-ffi` builds `libdeckgl_ffi.a` with a small C API (`include/deckgl.h`):
 
 1. `deckgl_metal_create(id<MTLDevice>, id<MTLCommandQueue>)` creates a wgpu device on the
    host's Metal device through wgpu's hal layer, using the host's command queue. Everything
@@ -43,7 +43,7 @@ scripts/run-maplibre-demo.sh ~/repos/maplibre-monorepo/maplibre-native
 ```
 
 The overlay draws whenever the map draws a frame, so it follows every pan, zoom and rotate.
-Pass `--benchmark` to the app for continuous rendering. The script builds `libdeckgl.a`,
+Pass `--benchmark` to the app for continuous rendering. The script builds `libdeckgl_ffi.a`,
 configures maplibre-native's `macos-metal` preset with the overlay enabled and starts the app
 over San Francisco. On this machine two workarounds were needed and the script applies them:
 the Homebrew ccache cannot start, and maplibre-tile-spec's FastPFOR needs the simde headers
@@ -72,7 +72,7 @@ Environment variables read by the overlay:
 
 ## All-Rust host through maplibre-native-ffi
 
-![all-Rust demo: maplibre-native-ffi basemap with deck.gl-native layers](images/maplibre-ffi-overlay.png)
+![all-Rust demo: maplibre-native-ffi basemap with deckgl-rs layers](images/maplibre-ffi-overlay.png)
 
 `examples/maplibre-ffi` is the same demo with no C++ at all. It uses the Rust bindings from
 [maplibre-native-ffi](https://github.com/maplibre/maplibre-native-ffi), whose build script
@@ -111,5 +111,5 @@ attaches the render session, renders and presents.
 - The same C API is the basis for iOS (`MLNMapView` custom layers) and for the Vulkan backend
   on Android, where wgpu's Vulkan hal offers the same raw-handle imports.
 - With the WebGPU backends of maplibre-native (Dawn or wgpu-native), deck could share the
-  `WGPUDevice` directly. That path needs deck.gl-native to be built against `webgpu.h`
+  `WGPUDevice` directly. That path needs deckgl-rs to be built against `webgpu.h`
   instead of the `wgpu` crate, which is a separate decision.

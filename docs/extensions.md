@@ -5,8 +5,8 @@ into the layer shaders at fixed hooks and by adding shader modules, attributes a
 deck.gl's GLSL hooks (`DECKGL_FILTER_SIZE`, `DECKGL_FILTER_GL_POSITION`, `DECKGL_FILTER_COLOR`)
 rely on `inout` parameters, function overloading and a preprocessor, none of which WGSL has,
 and deck.gl JS does not support hooks in its WGSL path yet. The native port therefore defines
-its own WGSL convention. It is implemented by the shader assembler in `luma-gl`
-(`crates/luma-gl/src/shader.rs`) and by `deck_gl::extension`.
+its own WGSL convention. It is implemented by the shader assembler in `lumagl-rs`
+(`crates/lumagl-rs/src/shader.rs`) and by `deckgl::extension`.
 
 ## The hooks
 
@@ -53,11 +53,11 @@ module scope. Uniforms need no special handling: a module declares
 
 ## Writing an extension
 
-Implement `deck_gl::LayerExtension`:
+Implement `deckgl::LayerExtension`:
 
 ```rust
-use deck_gl::luma_gl::{ShaderField, ShaderInjection, ShaderModuleSource};
-use deck_gl::{same_extension, Accessor, AttributeSource, ExtensionAttribute, ExtensionShaders, LayerExtension};
+use deckgl::lumagl::{ShaderField, ShaderInjection, ShaderModuleSource};
+use deckgl::{same_extension, Accessor, AttributeSource, ExtensionAttribute, ExtensionShaders, LayerExtension};
 
 #[derive(Debug, PartialEq)]
 struct TintExtension { get_tint: Accessor<f32>, scale: f32 }
@@ -81,10 +81,10 @@ impl LayerExtension for TintExtension {
             varyings: vec![ShaderField { name: "tint_value", ty: "f32" }],
         }
     }
-    fn attributes(&self, _: &LayerData) -> deck_gl::Result<Vec<(&'static str, AttributeSource)>> {
+    fn attributes(&self, _: &LayerData) -> deckgl::Result<Vec<(&'static str, AttributeSource)>> {
         Ok(vec![("tintValues", AttributeSource::Floats(self.get_tint.clone()))])
     }
-    fn update_uniforms(&self, model: &mut Model, _: &LayerContext, _: &Viewport, _: &LayerProps) -> deck_gl::Result<()> {
+    fn update_uniforms(&self, model: &mut Model, _: &LayerContext, _: &Viewport, _: &LayerProps) -> deckgl::Result<()> {
         model.uniforms("tint")?.set_f32("scale", self.scale)
     }
     fn equals(&self, other: &dyn LayerExtension) -> bool { same_extension(self, other) }
@@ -107,7 +107,7 @@ for extensions that declare attributes.
 
 ## Built in extensions
 
-`deck_gl_layers::extensions` ports `@deck.gl/extensions`:
+`deckgl_layers::extensions` ports `@deck.gl/extensions`:
 
 - `DataFilterExtension`: hides objects whose one to four numeric values (`get_filter_value`,
   a `FilterValues`) fall outside `filter_range`, fades them between `filter_soft_range` and

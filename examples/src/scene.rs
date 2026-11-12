@@ -6,11 +6,11 @@ use std::sync::Arc;
 use arrow_array::builder::{FixedSizeListBuilder, Float64Builder, UInt8Builder};
 use arrow_array::{Array, Float32Array, RecordBatch};
 use arrow_schema::{DataType, Field, Schema};
-use deck_gl::{Accessor, Layer, LayerData, LayerProps, Path, Polygon, Unit, ViewState};
-use deck_gl_layers::{
+use deckgl::{Accessor, Layer, LayerData, LayerProps, Path, Polygon, Unit, ViewState};
+use deckgl_layers::{
     AggregationOperation, AggregationProps, HexagonLayer, HexagonLayerProps, TripsLayer, TripsLayerProps,
 };
-use deck_gl_layers::{
+use deckgl_layers::{
     ArcLayer, ArcLayerProps, BitmapImage, BitmapLayer, BitmapLayerProps, ColumnLayer, ColumnLayerProps,
     IconAtlas, IconLayer, IconLayerProps, IconMapping, LineLayer, LineLayerProps, PathLayer, PathLayerProps,
     PolygonLayer, PolygonLayerProps, ScatterplotLayer, ScatterplotLayerProps, SolidPolygonLayer,
@@ -463,7 +463,7 @@ pub fn labels() -> TextLayer {
         ("Downtown", [CENTER[0] + 0.034, CENTER[1] - 0.004, 0.0]),
         ("Mission", [CENTER[0] + 0.005, CENTER[1] - 0.02, 0.0]),
         ("Golden Gate Park", [CENTER[0] - 0.046, CENTER[1] - 0.014, 0.0]),
-        ("deck.gl-native", [CENTER[0] - 0.008, CENTER[1] + 0.036, 0.0]),
+        ("deckgl-rs", [CENTER[0] - 0.008, CENTER[1] + 0.036, 0.0]),
     ];
     let names: Vec<String> = places.iter().map(|p| p.0.to_string()).collect();
     let positions: Vec<[f64; 3]> = places.iter().map(|p| p.1).collect();
@@ -485,9 +485,9 @@ pub fn labels() -> TextLayer {
         background: true,
         background_padding: [8.0, 4.0, 8.0, 4.0],
         background_border_radius: [6.0; 4],
-        font: deck_gl_layers::FontSettings {
+        font: deckgl_layers::FontSettings {
             sdf: true,
-            character_set: deck_gl_layers::CharacterSet::Auto,
+            character_set: deckgl_layers::CharacterSet::Auto,
             ..Default::default()
         },
         outline_width: 4.0,

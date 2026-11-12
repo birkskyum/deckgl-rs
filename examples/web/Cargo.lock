@@ -385,33 +385,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "deck-gl"
-version = "0.1.0"
-dependencies = [
- "arrow-array",
- "arrow-buffer",
- "arrow-schema",
- "arrow-select",
- "bytemuck",
- "glam",
- "luma-gl",
- "math-gl",
- "rayon",
- "serde_json",
- "thiserror",
- "tracing",
- "web-time",
- "wgpu",
-]
-
-[[package]]
-name = "deck-gl-json"
+name = "deckgl-json"
 version = "0.1.0"
 dependencies = [
  "arrow-array",
  "csv",
- "deck-gl",
- "deck-gl-layers",
+ "deckgl-layers",
+ "deckgl-rs",
  "glam",
  "image",
  "serde_json",
@@ -421,14 +401,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "deck-gl-layers"
+name = "deckgl-layers"
 version = "0.1.0"
 dependencies = [
  "a5",
  "arrow-array",
  "base64 0.22.1",
  "bytemuck",
- "deck-gl",
+ "deckgl-rs",
  "earcutr",
  "flate2",
  "fontdue",
@@ -437,8 +417,8 @@ dependencies = [
  "h3o",
  "image",
  "js-sys",
- "luma-gl",
- "math-gl",
+ "lumagl-rs",
+ "mathgl-rs",
  "serde_json",
  "thiserror",
  "tracing",
@@ -451,13 +431,33 @@ dependencies = [
 ]
 
 [[package]]
-name = "deck-gl-web"
+name = "deckgl-rs"
+version = "0.1.0"
+dependencies = [
+ "arrow-array",
+ "arrow-buffer",
+ "arrow-schema",
+ "arrow-select",
+ "bytemuck",
+ "glam",
+ "lumagl-rs",
+ "mathgl-rs",
+ "rayon",
+ "serde_json",
+ "thiserror",
+ "tracing",
+ "web-time",
+ "wgpu",
+]
+
+[[package]]
+name = "deckgl-web"
 version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
- "deck-gl",
- "deck-gl-json",
- "deck-gl-layers",
+ "deckgl-json",
+ "deckgl-layers",
+ "deckgl-rs",
  "js-sys",
  "serde_json",
  "wasm-bindgen",
@@ -1066,7 +1066,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f9f8bd3e56ce4dfc153cf470fffbfa98c7620958b312ca5c3a4b8d5181fd13c6"
 
 [[package]]
-name = "luma-gl"
+name = "lumagl-rs"
 version = "0.1.0"
 dependencies = [
  "bytemuck",
@@ -1081,7 +1081,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "math-gl"
+name = "mathgl-rs"
 version = "0.1.0"
 dependencies = [
  "glam",

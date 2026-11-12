@@ -1,4 +1,4 @@
-# deck.gl-native
+# deckgl-rs
 
 A native implementation of [deck.gl](https://deck.gl) for native hardware: Rust on
 [wgpu](https://wgpu.rs), rendering with deck.gl's own WGSL shaders and taking Apache Arrow
@@ -18,9 +18,9 @@ is kept in `cpp/` as a reference and described in [docs/cpp-prototype.md](docs/c
 The Rust port in `crates/` is a fresh port of deck.gl 9 and is the active code base.
 
 The documentation and the gallery are on the
-[site](https://birkskyum.github.io/deck.gl-native/), built from `site/`. Planned work is
-tracked in the [roadmap issue](https://github.com/birkskyum/deck.gl-native/issues/75) and
-the [issue list](https://github.com/birkskyum/deck.gl-native/issues).
+[site](https://birkskyum.github.io/deckgl-rs/), built from `site/`. Planned work is
+tracked in the [roadmap issue](https://github.com/birkskyum/deckgl-rs/issues/75) and
+the [issue list](https://github.com/birkskyum/deckgl-rs/issues).
 
 ## Gallery
 
@@ -72,7 +72,7 @@ that other layers draw)
 ([docs/extensions.md](docs/extensions.md)).
 
 **Embedding.** Render into a wgpu pass you own or into textures you provide. A C API
-(`libdeckgl.a`) takes JSON layers and Arrow tables through the Arrow C Data Interface, so a
+(`libdeckgl_ffi.a`) takes JSON layers and Arrow tables through the Arrow C Data Interface, so a
 host in any language feeds columnar data without copying it. Layers draw inside a
 maplibre-native map, depth interleaved with its 3D buildings
 ([docs/maplibre-native.md](docs/maplibre-native.md)). JSON descriptions follow the
@@ -86,12 +86,12 @@ PNG, logging goes through `tracing`, and criterion benchmarks cover the large la
 Not yet: point cloud (`pnts`) tiles in `Tile3DLayer`, draping layers over terrain (the other
 half of `TerrainExtension`), Python, Swift and Kotlin bindings, golden image comparisons
 against deck.gl JS, and published crates. See [docs/rust-port.md](docs/rust-port.md) for the
-design and the open decisions, and the [roadmap issue](https://github.com/birkskyum/deck.gl-native/issues/75)
+design and the open decisions, and the [roadmap issue](https://github.com/birkskyum/deckgl-rs/issues/75)
 for what is planned.
 
-![deck.gl-native arcs weaving through maplibre-native's 3D buildings](docs/images/maplibre-interleaved.png)
+![deckgl-rs arcs weaving through maplibre-native's 3D buildings](docs/images/maplibre-interleaved.png)
 
-*Depth interleaved: deck.gl-native arcs and maplibre-native's own extruded buildings in one
+*Depth interleaved: deckgl-rs arcs and maplibre-native's own extruded buildings in one
 frame, sharing a depth buffer, so the arcs pass behind the towers they go under. This is
 maplibre-native's GLFW app on Metal, drawing `examples/json/maplibre-arcs.json` through the C
 API. See [docs/maplibre-native.md](docs/maplibre-native.md).*
@@ -99,7 +99,7 @@ API. See [docs/maplibre-native.md](docs/maplibre-native.md).*
 ## Performance
 
 Measured on an Apple M series laptop, release build, including reading the 1024 x 1024 frame
-back to the CPU; `cargo bench -p deck-gl-layers --bench layers` and
+back to the CPU; `cargo bench -p deckgl-layers --bench layers` and
 [docs/benchmarks.md](docs/benchmarks.md) have the full table and the method.
 
 | | Upload | Frame |
@@ -120,16 +120,16 @@ hundred small layers initialize in 165 ms rather than 384 ms.
 
 | Crate | JavaScript counterpart | Contents |
 | --- | --- | --- |
-| `math-gl` | `@math.gl/web-mercator` | Web Mercator projection and camera math, f64 |
-| `luma-gl` | `@luma.gl/core`, `@luma.gl/shadertools` | Shader assembly, uniform blocks, textures, `Model`, headless device helpers |
-| `deck-gl` | `@deck.gl/core` | `Deck`, `Layer`, `Viewport`, the `project` shader module, Arrow data accessors |
-| `deck-gl-layers` | `@deck.gl/layers`, `@deck.gl/aggregation-layers`, `@deck.gl/geo-layers`, `@deck.gl/mesh-layers` | `ScatterplotLayer`, `LineLayer`, `SolidPolygonLayer`, `PathLayer`, `ArcLayer`, `BitmapLayer`, `IconLayer`, `TextLayer`, `ColumnLayer`, `GridCellLayer`, `PointCloudLayer`, `PolygonLayer`, `GeoJsonLayer`, `HexagonLayer`, `GridLayer`, `ScreenGridLayer`, `TripsLayer`, `GreatCircleLayer`, `SimpleMeshLayer`, `ScenegraphLayer` |
-| `deck-gl-json` | `@deck.gl/json` | JSON descriptions (pydeck format) with expression accessors |
-| `deck-gl-ffi` | `@deck.gl/mapbox` | C API (`libdeckgl.a`) for host renderers; Metal device and texture interop; JSON layers |
-| `deck-gl-examples` | | Example binaries |
+| `mathgl-rs` | `@math.gl/web-mercator` | Web Mercator projection and camera math, f64 |
+| `lumagl-rs` | `@luma.gl/core`, `@luma.gl/shadertools` | Shader assembly, uniform blocks, textures, `Model`, headless device helpers |
+| `deckgl-rs` | `@deck.gl/core` | `Deck`, `Layer`, `Viewport`, the `project` shader module, Arrow data accessors |
+| `deckgl-layers` | `@deck.gl/layers`, `@deck.gl/aggregation-layers`, `@deck.gl/geo-layers`, `@deck.gl/mesh-layers` | `ScatterplotLayer`, `LineLayer`, `SolidPolygonLayer`, `PathLayer`, `ArcLayer`, `BitmapLayer`, `IconLayer`, `TextLayer`, `ColumnLayer`, `GridCellLayer`, `PointCloudLayer`, `PolygonLayer`, `GeoJsonLayer`, `HexagonLayer`, `GridLayer`, `ScreenGridLayer`, `TripsLayer`, `GreatCircleLayer`, `SimpleMeshLayer`, `ScenegraphLayer` |
+| `deckgl-json` | `@deck.gl/json` | JSON descriptions (pydeck format) with expression accessors |
+| `deckgl-ffi` | `@deck.gl/mapbox` | C API (`libdeckgl_ffi.a`) for host renderers; Metal device and texture interop; JSON layers |
+| `deckgl-examples` | | Example binaries |
 
 The core crates also build for `wasm32-unknown-unknown` against wgpu's WebGPU backend, which
-CI checks on every push: `cargo build --target wasm32-unknown-unknown -p deck-gl` and, for the
+CI checks on every push: `cargo build --target wasm32-unknown-unknown -p deckgl-rs` and, for the
 layer and JSON crates, `--no-default-features` to leave out the parts with no wasm build
 (`fetch`, which pulls ring through ureq, and `s2-cells`). The browser is deck.gl JS's home,
 so this is a compile check rather than a supported target.
@@ -161,8 +161,8 @@ settle.
 ## Using the library
 
 ```rust
-use deck_gl::{Accessor, Deck, DeckProps, LayerData, LayerProps, ViewState};
-use deck_gl_layers::{ScatterplotLayer, ScatterplotLayerProps};
+use deckgl::{Accessor, Deck, DeckProps, LayerData, LayerProps, ViewState};
+use deckgl_layers::{ScatterplotLayer, ScatterplotLayerProps};
 
 let layer = ScatterplotLayer::new(ScatterplotLayerProps {
     base: LayerProps::new("points"),
@@ -193,7 +193,7 @@ drive the deck camera from its own.
 The same scene as a JSON description, the format pydeck and deck.gl's JSON playground use:
 
 ```rust
-let json = deck_gl_json::JsonConverter::parse_file("scene.json")?;
+let json = deckgl_json::JsonConverter::parse_file("scene.json")?;
 deck.set_layers(json.layers);
 ```
 

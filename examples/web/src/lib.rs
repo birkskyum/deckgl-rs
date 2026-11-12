@@ -1,4 +1,4 @@
-//! deck.gl-native in a browser.
+//! deckgl-rs in a browser.
 //!
 //! The same layers, shaders and projection math as the native build, compiled to wasm32 and
 //! drawing through wgpu. On WebGPU it owns a canvas; with the `webgl` feature it draws
@@ -10,9 +10,9 @@
 #[cfg(feature = "webgl")]
 mod maplibre;
 
-use deck_gl::luma_gl::RenderTarget;
-use deck_gl::{Deck, DeckProps, MapController, ViewState};
-use deck_gl_json::JsonConverter;
+use deckgl::lumagl::RenderTarget;
+use deckgl::{Deck, DeckProps, MapController, ViewState};
+use deckgl_json::JsonConverter;
 use wasm_bindgen::prelude::*;
 use web_sys::HtmlCanvasElement;
 
@@ -75,7 +75,7 @@ pub async fn create(canvas: HtmlCanvasElement) -> Result<DeckGl, JsValue> {
         .map_err(|_| err("no GPU adapter: this browser has neither WebGPU nor WebGL2"))?;
     let (device, queue) = adapter
         .request_device(&wgpu::DeviceDescriptor {
-            label: Some("deck.gl-native"),
+            label: Some("deckgl-rs"),
             // The browser's own limits, so a WebGL2 device is not asked for more than it has
             required_limits: adapter.limits(),
             ..Default::default()
@@ -229,7 +229,7 @@ impl DeckGl {
     /// asking for frames.
     pub fn render(&mut self) -> Result<bool, JsValue> {
         // Layers whose data or tiles were still loading are rebuilt once something arrived
-        let generation = deck_gl_layers::fetch::Fetcher::global().generation();
+        let generation = deckgl_layers::fetch::Fetcher::global().generation();
         if generation != self.converted_at && self.spec.is_some() {
             self.convert(false)?;
         }
@@ -256,7 +256,7 @@ impl DeckGl {
             .map_err(err)?;
         self.queue.submit([encoder.finish()]);
         self.queue.present(frame);
-        Ok(!deck_gl_layers::fetch::Fetcher::global().is_idle())
+        Ok(!deckgl_layers::fetch::Fetcher::global().is_idle())
     }
 
     /// Which backend the frames go through, `"webgpu"` or `"webgl2"`.
@@ -276,7 +276,7 @@ impl DeckGl {
         let Some(value) = &self.spec else {
             return Ok(());
         };
-        self.converted_at = deck_gl_layers::fetch::Fetcher::global().generation();
+        self.converted_at = deckgl_layers::fetch::Fetcher::global().generation();
         let converted = JsonConverter::new().convert(value).map_err(err)?;
         self.warnings = converted.warnings;
         if camera {

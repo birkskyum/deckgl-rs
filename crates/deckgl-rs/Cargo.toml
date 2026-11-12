@@ -1,0 +1,39 @@
+[package]
+name = "deckgl-rs"
+description = "Rust port of @deck.gl/core: Deck, Layer, Viewport and the project shader module on wgpu"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+
+[lib]
+name = "deckgl"
+
+[dependencies]
+web-time = { workspace = true }
+rayon = { workspace = true, optional = true }
+tracing = { workspace = true }
+mathgl-rs = { workspace = true }
+lumagl-rs = { workspace = true }
+wgpu = { workspace = true }
+glam = { workspace = true }
+bytemuck = { workspace = true }
+thiserror = { workspace = true }
+arrow-array = { workspace = true }
+arrow-schema = { workspace = true }
+arrow-buffer = { workspace = true }
+arrow-select = { workspace = true }
+serde_json = { workspace = true }
+image = { workspace = true, optional = true }
+
+[features]
+default = ["parallel"]
+# Spread big uploads and tessellation over the cores with rayon. Off for wasm32, which has
+# no threads to spread over.
+parallel = ["dep:rayon"]
+# `Snapshot::save_png`
+png = ["dep:image"]
+# Draw through wgpu's WebGL2 backend, see `lumagl-rs`.
+webgl = ["lumagl-rs/webgl", "wgpu/webgl"]

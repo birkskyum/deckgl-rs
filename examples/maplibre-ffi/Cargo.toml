@@ -1,9 +1,9 @@
 [package]
-name = "deck-gl-maplibre-demo"
+name = "deckgl-maplibre-demo"
 version = "0.1.0"
 edition = "2021"
 publish = false
-description = "deck.gl-native layers drawn into a maplibre-native map through maplibre-native-ffi, all in Rust"
+description = "deckgl-rs layers drawn into a maplibre-native map through maplibre-native-ffi, all in Rust"
 
 # Standalone crate: it needs the MapLibre native library, which the maplibre-native-ffi
 # build script downloads, and a checkout of https://github.com/maplibre/maplibre-native-ffi
@@ -11,11 +11,11 @@ description = "deck.gl-native layers drawn into a maplibre-native map through ma
 [workspace]
 
 [dependencies]
-deck-gl = { path = "../../crates/deck-gl" }
-deck-gl-layers = { path = "../../crates/deck-gl-layers" }
-deck-gl-json = { path = "../../crates/deck-gl-json" }
-deck-gl-ffi = { path = "../../crates/deck-gl-ffi" }
-deck-gl-examples = { path = ".." }
+deckgl-rs = { path = "../../crates/deckgl-rs" }
+deckgl-layers = { path = "../../crates/deckgl-layers" }
+deckgl-json = { path = "../../crates/deckgl-json" }
+deckgl-ffi = { path = "../../crates/deckgl-ffi" }
+deckgl-examples = { path = ".." }
 maplibre-native-ffi = { path = "../../../maplibre-native-ffi/bindings/rust/crates/maplibre-native-ffi", features = ["metal"] }
 wgpu = "30"
 winit = "0.30"

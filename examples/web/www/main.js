@@ -2,8 +2,8 @@
 // and asks for a frame whenever something moved or is still loading.
 // ?webgl loads the WebGL2 build instead, the one the maplibre-gl-js layer uses
 const module = new URLSearchParams(location.search).has('webgl')
-  ? await import('./pkg/deck_gl_web_gl.js')
-  : await import('./pkg/deck_gl_web.js')
+  ? await import('./pkg/deckgl_web_gl.js')
+  : await import('./pkg/deckgl_web.js')
 const { default: init, create } = module
 
 const SCENES = [
@@ -131,7 +131,7 @@ async function main() {
       return
     }
     const warnings = deck.warnings
-    say(warnings.length ? warnings.join('; ') : `${file} drawn by deck.gl-native`)
+    say(warnings.length ? warnings.join('; ') : `${file} drawn by deckgl-rs`)
     invalidate()
   }
 

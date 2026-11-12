@@ -1,4 +1,4 @@
-//! deck.gl-native on a maplibre-native map, all in Rust.
+//! deckgl-rs on a maplibre-native map, all in Rust.
 //!
 //! wgpu owns the window and a color texture. Each frame maplibre-native renders the map into
 //! that texture through maplibre-native-ffi's caller-owned Metal texture target, deck draws its
@@ -20,11 +20,11 @@ use std::sync::{Arc, Mutex};
 use std::thread::JoinHandle;
 use std::time::{Duration, Instant};
 
-use deck_gl::luma_gl::device::{create_render_texture, read_texture_rgba8};
-use deck_gl::luma_gl::RenderTarget;
-use deck_gl::{Deck, DeckProps, ViewState};
-use deck_gl_examples::spec;
-use deckgl::{maplibre_near_far_pixels, viewport_from_camera, DeckglCamera};
+use deckgl::lumagl::device::{create_render_texture, read_texture_rgba8};
+use deckgl::lumagl::RenderTarget;
+use deckgl::{Deck, DeckProps, ViewState};
+use deckgl_examples::spec;
+use deckgl_ffi::{maplibre_near_far_pixels, viewport_from_camera, DeckglCamera};
 use maplibre_native_ffi as mln;
 use objc2::runtime::ProtocolObject;
 use objc2_metal::MTLTexture;
@@ -399,7 +399,7 @@ impl State {
             ..Default::default()
         }))?;
         let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor {
-            label: Some("deck.gl-native maplibre demo"),
+            label: Some("deckgl-rs maplibre demo"),
             ..Default::default()
         }))?;
         let mut config = surface
@@ -435,7 +435,7 @@ impl State {
             .attach_ref
             .attach_metal_borrowed_texture(&attachments.borrowed_descriptor(size)?)?;
 
-        // deck.gl-native on the same wgpu device
+        // deckgl-rs on the same wgpu device
         let deck = Deck::new(
             &device,
             &queue,
@@ -688,7 +688,7 @@ impl ApplicationHandler for App {
             return;
         }
         let attributes = Window::default_attributes()
-            .with_title("deck.gl-native + maplibre-native-ffi")
+            .with_title("deckgl-rs + maplibre-native-ffi")
             .with_inner_size(winit::dpi::LogicalSize::new(1024, 768));
         let window = match event_loop.create_window(attributes) {
             Ok(window) => Arc::new(window),

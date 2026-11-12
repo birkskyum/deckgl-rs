@@ -1,4 +1,4 @@
-# deck.gl-native in a browser
+# deckgl-rs in a browser
 
 The crates compiled to `wasm32-unknown-unknown`, drawing with wgpu through the browser's
 WebGPU, or through WebGL2 when built with the `webgl` feature. Same layers, same WGSL
@@ -115,7 +115,7 @@ frame a second, so the timings would be that throttle rather than the work.
 ## The JavaScript API
 
 ```js
-import init, { create } from './pkg/deck_gl_web.js'
+import init, { create } from './pkg/deckgl_web.js'
 
 await init()
 const deck = await create(canvas)

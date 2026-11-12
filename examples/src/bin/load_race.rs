@@ -22,15 +22,15 @@ use std::error::Error;
 use std::path::Path;
 use std::time::Instant;
 
-use deck_gl::luma_gl::device::create_headless_context;
-use deck_gl::luma_gl::RenderTarget;
-use deck_gl::{Accessor, Deck, DeckProps, LayerData, LayerProps, ViewState};
-use deck_gl_examples::bigdata;
-use deck_gl_layers::aggregation::AggregationProps;
-use deck_gl_layers::{HexagonLayer, HexagonLayerProps};
+use deckgl::lumagl::device::create_headless_context;
+use deckgl::lumagl::RenderTarget;
+use deckgl::{Accessor, Deck, DeckProps, LayerData, LayerProps, ViewState};
+use deckgl_examples::bigdata;
+use deckgl_layers::aggregation::AggregationProps;
+use deckgl_layers::{HexagonLayer, HexagonLayerProps};
 
 const SIZE: u32 = 1024;
-const CLEAR: deck_gl::wgpu::Color = deck_gl::wgpu::Color {
+const CLEAR: deckgl::wgpu::Color = deckgl::wgpu::Color {
     r: 0.02,
     g: 0.03,
     b: 0.06,
@@ -38,7 +38,7 @@ const CLEAR: deck_gl::wgpu::Color = deck_gl::wgpu::Color {
 };
 
 fn main() -> Result<(), Box<dyn Error>> {
-    deck_gl_examples::init_logging();
+    deckgl_examples::init_logging();
     let mut args = std::env::args().skip(1);
     let Some(path) = args.next() else {
         eprintln!(

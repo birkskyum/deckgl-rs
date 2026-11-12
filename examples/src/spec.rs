@@ -5,8 +5,8 @@
 
 use std::error::Error;
 
-use deck_gl::{AnyViewState, DeckView, Layer, LightingEffect, View, ViewState};
-use deck_gl_json::JsonConverter;
+use deckgl::{AnyViewState, DeckView, Layer, LightingEffect, View, ViewState};
+use deckgl_json::JsonConverter;
 
 use crate::scene;
 
@@ -37,7 +37,7 @@ pub struct Scene {
     /// The description's `LightingEffect`, when it has one
     pub lighting: Option<LightingEffect>,
     /// The description's `PostProcessEffect`s, in order
-    pub post_process: Vec<deck_gl::PostProcessEffect>,
+    pub post_process: Vec<deckgl::PostProcessEffect>,
     /// Draw world copies across the antimeridian (`views: [{"@@type": "MapView", "repeat": true}]`)
     pub repeat: bool,
     /// The kind of view, and its camera when the description is not a map
@@ -105,7 +105,7 @@ pub fn load(bearing: f64) -> Result<Scene, Box<dyn Error>> {
 
 /// Apply a scene's views and cameras to a deck (single view decks need nothing).
 pub fn apply_views(
-    deck: &mut deck_gl::Deck,
+    deck: &mut deckgl::Deck,
     views: &[DeckView],
     cameras: &std::collections::HashMap<String, AnyViewState>,
 ) {
