@@ -12,15 +12,16 @@ jobs:
   check:
     name: fmt, clippy, test (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
-    # The GPU tests run against lavapipe. ubuntu-latest rolled from 24.04 to 26.04 in
-    # October 2026, which brought mesa-vulkan-drivers 25.2.8 -> 26.0.8, and the layer
-    # render tests SIGSEGV inside the 26.0 driver. The same tests pass on macOS (Metal)
-    # and Windows, and no shader changed, so this is pinned to the last image known to
-    # run them until the crash under Mesa 26 is tracked down.
+    # The GPU tests run against lavapipe. On ubuntu-26.04, which ubuntu-latest rolled
+    # to in October 2026 along with mesa-vulkan-drivers 25.2.8 -> 26.0.8, they SIGSEGV
+    # when libtest runs them in parallel. Every one of them passes on that same image
+    # one at a time, so it is concurrent use of the driver that falls over, not any
+    # test it cannot render. Linux therefore runs the suite serially; macOS and Windows
+    # keep their threads.
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -33,6 +34,10 @@ jobs:
       - run: cargo fmt --all -- --check
       - run: cargo clippy --workspace --all-targets -- -D warnings
       - run: cargo test --workspace
+        if: runner.os != 'Linux'
+      # Serialised: see the note on this job.
+      - run: cargo test --workspace -- --test-threads=1
+        if: runner.os == 'Linux'
       - name: Render the example scene
         run: cargo run --release --bin texture_render -- target/texture-render.png
       - uses: actions/upload-artifact@v4
@@ -67,8 +72,7 @@ jobs:
 
   coverage:
     name: coverage (ubuntu)
-    # Pinned for the same reason as the matrix above.
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -79,7 +83,8 @@ jobs:
       - name: Install a software Vulkan driver for GPU tests
         run: sudo apt-get update && sudo apt-get install -y mesa-vulkan-drivers libvulkan1 vulkan-tools
       - name: Test with coverage
-        run: cargo llvm-cov --workspace --lcov --output-path target/lcov.info
+        # Serialised for the same reason as the check job.
+        run: cargo llvm-cov --workspace --lcov --output-path target/lcov.info -- --test-threads=1
       - name: Coverage summary
         run: cargo llvm-cov report --summary-only
       - uses: actions/upload-artifact@v4
