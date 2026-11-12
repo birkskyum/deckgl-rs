@@ -103,7 +103,7 @@ jobs:
           . /etc/os-release && echo "image: $PRETTY_NAME"
           dpkg -s mesa-vulkan-drivers | grep ^Version
           vulkaninfo --summary 2>/dev/null | head -30 || true
-      - name: Render tests, one at a time
+      - name: Whole suite, one test at a time
         env:
           RUST_BACKTRACE: 1
-        run: cargo test -p deckgl-rs-layers --test render -- --test-threads=1 --nocapture
+        run: cargo test --workspace -- --test-threads=1
