@@ -32,13 +32,25 @@ mln-rs is edition 2024 with a 1.98 MSRV, above this repository's own.
 
 | variable | effect |
 | --- | --- |
+| `DECKGL_MLN_STYLE=<url>` | load a real style instead of the built-in background, e.g. `https://tiles.openfreemap.org/styles/liberty` |
 | `DECKGL_MLN_DEPTH=0` | draw deck on top instead of sharing the map's depth buffer |
+
+![deck layers interleaved with mln-rs's 3D buildings](../../docs/images/mln-interleaved.png)
+
+*deck's cyan tower cut into by the buildings in front of it, and its olive ground circles
+surviving only in the gaps between them. Basemap: OpenFreeMap Liberty, rendered by mln-rs.*
+
+The same frame with `DECKGL_MLN_DEPTH=0`, where deck ignores the map's depth buffer, shows
+what the depth sharing is worth: every circle is a whole ellipse floating over the city and
+the tower stands in front of everything.
+
+![the same scene drawn on top instead](../../docs/images/mln-on-top.png)
 
 ## State
 
 Working: the device is shared, the map renders on it, deck draws into the texture and the
-depth buffer the map rendered into, and the composite reads back through mln-rs as one
-image.
+depth buffer the map rendered into, deck geometry is occluded by the map's buildings, and
+the composite reads back through mln-rs as one image.
 
 Sharing the depth buffer took two corrections, both of which fall out of mln-rs being a
 faithful port. Its `mat4::perspective` is the OpenGL one, writing `(far + near) / (near -
@@ -47,12 +59,10 @@ far plane is maplibre's `furthest_distance * 1.01`, so `maplibre_near_far_pixels
 FFI crate gives deck the same frustum. Without those, every deck fragment was rejected and
 the layers vanished.
 
-**Not yet demonstrated: occlusion.** The style here is a bare background, which maplibre
-draws with depth `Always` and `ReadOnly`, so the map writes nothing into the depth buffer
-and there is nothing for it to hide. Interleaved and `DECKGL_MLN_DEPTH=0` output is
-byte-identical for this scene. Showing deck's ground circles notched out by 3D buildings,
-the way the maplibre-native GLFW host does, needs a style with `fill-extrusion` and
-therefore vector tiles over the network.
+Occlusion needs a style that writes depth. The built-in one is a bare background, which
+maplibre draws `Always` and `ReadOnly`, so it writes nothing and interleaved output is
+byte-identical to drawing on top. Point `DECKGL_MLN_STYLE` at a style with a
+`fill-extrusion` layer, such as Liberty's `building-3d`, and the buildings occlude deck.
 
 One upstream change is also carried locally for now: `HeadlessFrontend` holds its
 `LocalTarget` privately, so reaching the frame needs a `target()` accessor. It is one

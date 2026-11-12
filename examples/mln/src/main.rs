@@ -36,25 +36,27 @@ const STYLE: &str = r##"{
 const SCENE: &str = r#"[
   {
     "@@type": "ScatterplotLayer",
-    "id": "points",
+    "id": "ground",
     "data": [
-      {"position": [-122.42, 37.775]},
-      {"position": [-122.40, 37.785]},
-      {"position": [-122.44, 37.765]}
+      {"position": [-122.4010, 37.7905]},
+      {"position": [-122.3995, 37.7898]},
+      {"position": [-122.4025, 37.7892]},
+      {"position": [-122.3985, 37.7912]},
+      {"position": [-122.4000, 37.7885]}
     ],
     "getPosition": "@@=position",
-    "getRadius": 400,
-    "getFillColor": [255, 140, 0, 220],
+    "getRadius": 45,
+    "getFillColor": [150, 160, 40, 255],
     "radiusUnits": "meters"
   },
   {
     "@@type": "SolidPolygonLayer",
-    "id": "block",
-    "data": [{"polygon": [[-122.425, 37.770], [-122.395, 37.770], [-122.395, 37.800], [-122.425, 37.800]]}],
+    "id": "tower",
+    "data": [{"polygon": [[-122.4035, 37.7880], [-122.4028, 37.7880], [-122.4028, 37.7887], [-122.4035, 37.7887]]}],
     "extruded": true,
     "getPolygon": "@@=polygon",
-    "getElevation": 600,
-    "getFillColor": [0, 150, 255, 200]
+    "getElevation": 260,
+    "getFillColor": [0, 150, 255, 220]
   }
 ]"#;
 
@@ -126,11 +128,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             .with_pixel_ratio(1.0),
     )?;
     frontend.attach(&map);
-    map.style_mut().load_json(STYLE);
+    // A real style gives the map 3D buildings, which write depth and so can occlude
+    // deck's ground layers. Without it the inline background writes no depth at all.
+    match std::env::var("DECKGL_MLN_STYLE") {
+        Ok(url) if !url.is_empty() => {
+            println!("style: {url}");
+            map.style_mut().load_url(&url);
+        }
+        _ => map.style_mut().load_json(STYLE),
+    }
     let map_camera = CameraOptions::default()
-        .with_center(Some(LatLng::new(37.775, -122.42)?))
-        .with_zoom(Some(13.5))
-        .with_pitch(Some(55.0))
+        .with_center(Some(LatLng::new(37.7898, -122.4010)?))
+        .with_zoom(Some(16.0))
+        .with_pitch(Some(62.0))
         .with_bearing(Some(-25.0));
     map.jump_to(&map_camera);
 
