@@ -14,7 +14,9 @@ the layer designs, the WGSL shaders and the projection math are ports of
 [deck.gl](https://github.com/visgl/deck.gl) and [luma.gl](https://github.com/visgl/luma.gl),
 and the repository started from the 2020 C++ prototype that Unfolded, Inc. published as
 [UnfoldedInc/deck.gl-native](https://github.com/UnfoldedInc/deck.gl-native). That prototype
-is kept in `cpp/` as a reference and described in [docs/cpp-prototype.md](docs/cpp-prototype.md).
+is no longer in this repository; it is kept at
+[birkskyum/deck.gl-native-archive](https://github.com/birkskyum/deck.gl-native-archive) and
+described in [docs/cpp-prototype.md](docs/cpp-prototype.md).
 The Rust port in `crates/` is a fresh port of deck.gl 9 and is the active code base.
 
 The documentation and the gallery are on the

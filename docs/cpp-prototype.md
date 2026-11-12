@@ -1,8 +1,9 @@
 # The 2020 C++ prototype
 
 This is the original README of the C++ prototype that Unfolded, Inc. built in 2020 and archived
-at [UnfoldedInc/deck.gl-native](https://github.com/UnfoldedInc/deck.gl-native). The code is
-kept in `cpp/` for reference. It targets a 2020 snapshot of dawn and prebuilt x64 dependencies
+at [UnfoldedInc/deck.gl-native](https://github.com/UnfoldedInc/deck.gl-native). A fork of the code is
+kept at [birkskyum/deck.gl-native-archive](https://github.com/birkskyum/deck.gl-native-archive)
+for reference. It targets a 2020 snapshot of dawn and prebuilt x64 dependencies
 and does not build on current toolchains.
 
 ---

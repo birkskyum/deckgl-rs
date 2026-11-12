@@ -19,7 +19,9 @@ A native deck.gl renderer for native hardware (mobile and desktop GPUs) that
 dependencies and is stale against deck.gl 9. Every GPU call and every shader needed rewriting
 anyway. Cargo replaces the vcpkg, depot_tools and gn pipeline, cross-compiles to iOS and
 Android, and wgpu exposes its hal layer for importing a host's Metal or Vulkan textures. The
-C++ tree stays in `cpp/` as a design reference.
+C++ tree is kept at
+[birkskyum/deck.gl-native-archive](https://github.com/birkskyum/deck.gl-native-archive) as a
+design reference.
 
 **Port deck.gl 9, not the C++ code.** Module names, class names and even file names follow the
 JavaScript packages (`@math.gl/web-mercator`, `@luma.gl/core`, `@deck.gl/core`,
