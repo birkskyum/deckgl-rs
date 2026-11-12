@@ -38,7 +38,7 @@ fontdue = { workspace = true }
 arrow-array = { workspace = true }
 serde_json = { workspace = true }
 image = { workspace = true, features = ["jpeg"] }
-h3o = { version = "0.8", features = ["geo"] }
+h3o = { version = "0.11", features = ["geo"] }
 s2 = { version = "0.0.12", optional = true }
 flate2 = "1"
 rayon = { workspace = true, optional = true }

@@ -12,12 +12,13 @@ members = [
 # Standalone crates, built on their own:
 # - maplibre-ffi needs the native MapLibre library and a sibling maplibre-native-ffi checkout
 # - web is a wasm32 cdylib, built by examples/web/build.sh
-exclude = ["examples/maplibre-ffi", "examples/web"]
+# - mln needs a checkout of https://github.com/louwers/mln-rs next to this repository
+exclude = ["examples/maplibre-ffi", "examples/web", "examples/mln"]
 
 [workspace.package]
 version = "0.1.0"
 edition = "2021"
-rust-version = "1.87"
+rust-version = "1.94"
 license = "MIT OR Apache-2.0"
 authors = ["Birk Skyum"]
 repository = "https://github.com/birkskyum/deckgl-rs"

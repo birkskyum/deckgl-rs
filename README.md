@@ -140,7 +140,7 @@ Shader sources under `src/wgsl` in each crate are copied from deck.gl 9.4 and lu
 
 ## Building and running
 
-Requires a stable Rust toolchain (1.87 or newer) and a GPU with Metal, Vulkan or DirectX 12.
+Requires a stable Rust toolchain (1.94 or newer) and a GPU with Metal, Vulkan or DirectX 12.
 
 ```sh
 cargo test --workspace                     # unit tests plus headless GPU render tests
