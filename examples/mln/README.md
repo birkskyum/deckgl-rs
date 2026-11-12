@@ -64,8 +64,10 @@ maplibre draws `Always` and `ReadOnly`, so it writes nothing and interleaved out
 byte-identical to drawing on top. Point `DECKGL_MLN_STYLE` at a style with a
 `fill-extrusion` layer, such as Liberty's `building-3d`, and the buildings occlude deck.
 
-One upstream change is also carried locally for now: `HeadlessFrontend` holds its
-`LocalTarget` privately, so reaching the frame needs a `target()` accessor. It is one
-line and fits mln-rs's existing "Port-only" host hooks (`Device::webgpu`,
-`with_device`, `SurfaceTarget::set_overlay`), so it belongs upstream rather than in a
-fork.
+`HeadlessFrontend::target()`, which this needs to reach the frame, is upstream as of
+[louwers/mln-rs#211](https://github.com/louwers/mln-rs/pull/211). No patched checkout
+is required.
+
+Still open upstream: `SurfaceTarget::set_overlay` hands an overlay only the colour view,
+so the windowed path cannot depth-test against the map the way this headless one does.
+Adding the depth-stencil view and format to `OverlayTarget` would close that gap.
