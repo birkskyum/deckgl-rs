@@ -4,9 +4,7 @@
 use deckgl::attribute_manager::{AttributeManager, AttributeSource, BufferSpec, Field};
 use deckgl::layer::{set_model_picking_active, update_standard_uniforms};
 use deckgl::shaderlib::{LIGHTING_MODULES, STANDARD_MODULES};
-use deckgl::{
-    Accessor, Color, Layer, LayerContext, LayerData, LayerProps, Position, Result, Unit, Viewport,
-};
+use deckgl::{Accessor, Color, Layer, LayerContext, LayerData, LayerProps, Position, Result, Unit, Viewport};
 use glam::Vec2;
 use lumagl::buffer::{create_index_buffer, create_vertex_buffer_from};
 use lumagl::{Model, ModelDescriptor, ShaderModuleSource, VertexBufferLayout};

@@ -3,8 +3,8 @@
 use deckgl::lumagl::device::{create_headless_context, create_render_texture, read_texture_rgba8};
 use deckgl::lumagl::RenderTarget;
 use deckgl::{Deck, DeckProps};
-use deckgl_json::JsonConverter;
 use deckgl_ffi::{maplibre_near_far_pixels, viewport_from_camera, DeckglCamera};
+use deckgl_json::JsonConverter;
 
 const SIZE: u32 = 512;
 

@@ -306,11 +306,7 @@ pub fn viewport_from_camera(camera: &DeckglCamera) -> Viewport {
     }
     opts.roll = camera.roll_degrees;
     if camera.center_elevation_meters != 0.0 {
-        opts.position = Some(deckgl::glam::DVec3::new(
-            0.0,
-            0.0,
-            camera.center_elevation_meters,
-        ));
+        opts.position = Some(deckgl::glam::DVec3::new(0.0, 0.0, camera.center_elevation_meters));
     }
     if camera.has_projection_matrix != 0 {
         opts.projection_matrix = Some(deckgl::glam::DMat4::from_cols_array(&camera.projection_matrix));

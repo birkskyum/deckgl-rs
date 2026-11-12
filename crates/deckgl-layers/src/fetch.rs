@@ -702,10 +702,7 @@ fn http_get(url: &str, cancel: &CancelToken, max_bytes: usize) -> std::result::R
         return Err(format!("{url}: cancelled"));
     }
     let response = ureq::get(url)
-        .header(
-            "User-Agent",
-            concat!("deckgl-rs/", env!("CARGO_PKG_VERSION")),
-        )
+        .header("User-Agent", concat!("deckgl-rs/", env!("CARGO_PKG_VERSION")))
         .call()
         .map_err(|e| format!("{url}: {e}"))?;
     if response.status().as_u16() >= 400 {

@@ -3,9 +3,7 @@
 use deckgl::attribute_manager::{AttributeManager, AttributeSource, BufferSpec};
 use deckgl::layer::{initialized, set_model_picking_active, update_standard_uniforms};
 use deckgl::shaderlib::STANDARD_MODULES;
-use deckgl::{
-    Accessor, Color, Layer, LayerContext, LayerData, LayerProps, Position, Result, Unit, Viewport,
-};
+use deckgl::{Accessor, Color, Layer, LayerContext, LayerData, LayerProps, Position, Result, Unit, Viewport};
 use lumagl::buffer::create_vertex_buffer_from;
 use lumagl::{Model, ModelDescriptor, VertexBufferLayout};
 use wgpu::VertexFormat;

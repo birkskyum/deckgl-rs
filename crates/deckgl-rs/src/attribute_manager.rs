@@ -10,9 +10,7 @@ use std::collections::{HashMap, HashSet};
 use arrow_array::cast::AsArray;
 use arrow_array::types::{Float32Type, UInt8Type};
 use arrow_array::Array;
-use lumagl::buffer::{
-    write_or_create_vertex_buffer, write_or_grow_vertex_buffer, write_vertex_buffer_range,
-};
+use lumagl::buffer::{write_or_create_vertex_buffer, write_or_grow_vertex_buffer, write_vertex_buffer_range};
 use lumagl::{Model, VertexBufferLayout};
 use wgpu::VertexFormat;
 
