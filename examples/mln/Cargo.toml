@@ -1,0 +1,22 @@
+# Its own workspace: mln-rs is edition 2024 with a 1.98 MSRV and pulls a large
+# tree, and it needs a checkout of https://github.com/louwers/mln-rs next to
+# this repository.
+[workspace]
+
+[package]
+name = "deckgl-mln-demo"
+description = "deckgl-rs layers drawn into an mln-rs basemap: one wgpu device, one frame, all Rust"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+deckgl-rs = { path = "../../crates/deckgl-rs", features = ["png"] }
+deckgl-rs-json = { path = "../../crates/deckgl-rs-json" }
+mln-rs = { path = "../../../mln-rs" }
+wgpu = "30"
+pollster = "0.4"
+image = { version = "0.25", default-features = false, features = ["png"] }
+
+[profile.dev]
+opt-level = 1
