@@ -12,10 +12,15 @@ jobs:
   check:
     name: fmt, clippy, test (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    # The GPU tests run against lavapipe. ubuntu-latest rolled from 24.04 to 26.04 in
+    # October 2026, which brought mesa-vulkan-drivers 25.2.8 -> 26.0.8, and the layer
+    # render tests SIGSEGV inside the 26.0 driver. The same tests pass on macOS (Metal)
+    # and Windows, and no shader changed, so this is pinned to the last image known to
+    # run them until the crash under Mesa 26 is tracked down.
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-24.04, macos-latest, windows-latest]
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -62,7 +67,8 @@ jobs:
 
   coverage:
     name: coverage (ubuntu)
-    runs-on: ubuntu-latest
+    # Pinned for the same reason as the matrix above.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
