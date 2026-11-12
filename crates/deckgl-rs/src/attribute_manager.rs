@@ -297,29 +297,44 @@ impl Resolved {
     /// Values back from their flattened numbers.
     fn from_components(shape: Shape, values: &[f64]) -> Self {
         match shape {
-            Shape::Positions => Self::Positions(values.chunks_exact(3).map(|c| [c[0], c[1], c[2]]).collect()),
+            Shape::Positions => Self::Positions(
+                values
+                    .as_chunks::<3>()
+                    .0
+                    .iter()
+                    .map(|c| [c[0], c[1], c[2]])
+                    .collect(),
+            ),
             Shape::Colors => Self::Colors(
                 values
-                    .chunks_exact(4)
+                    .as_chunks::<4>()
+                    .0
+                    .iter()
                     .map(|c| [c[0], c[1], c[2], c[3]].map(|v| v.round().clamp(0.0, 255.0) as u8))
                     .collect(),
             ),
             Shape::Floats => Self::Floats(values.iter().map(|v| *v as f32).collect()),
             Shape::Vec2 => Self::Vec2(
                 values
-                    .chunks_exact(2)
+                    .as_chunks::<2>()
+                    .0
+                    .iter()
                     .map(|c| [c[0] as f32, c[1] as f32])
                     .collect(),
             ),
             Shape::Vec3 => Self::Vec3(
                 values
-                    .chunks_exact(3)
+                    .as_chunks::<3>()
+                    .0
+                    .iter()
                     .map(|c| [c[0] as f32, c[1] as f32, c[2] as f32])
                     .collect(),
             ),
             Shape::Vec4 => Self::Vec4(
                 values
-                    .chunks_exact(4)
+                    .as_chunks::<4>()
+                    .0
+                    .iter()
                     .map(|c| [c[0] as f32, c[1] as f32, c[2] as f32, c[3] as f32])
                     .collect(),
             ),

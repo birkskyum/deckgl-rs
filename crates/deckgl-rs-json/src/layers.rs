@@ -875,7 +875,13 @@ fn mesh_prop(p: &Props, options: &ConvertOptions) -> Result<Option<Arc<deckgl_la
                         if !flat.len().is_multiple_of(3) {
                             return Err(p.error("mesh", format!("{key} needs three values per vertex")));
                         }
-                        Ok(Some(flat.chunks_exact(3).map(|c| [c[0], c[1], c[2]]).collect()))
+                        Ok(Some(
+                            flat.as_chunks::<3>()
+                                .0
+                                .iter()
+                                .map(|c| [c[0], c[1], c[2]])
+                                .collect(),
+                        ))
                     }
                 }
             };
@@ -888,7 +894,7 @@ fn mesh_prop(p: &Props, options: &ConvertOptions) -> Result<Option<Arc<deckgl_la
                 if !flat.len().is_multiple_of(2) {
                     return Err(p.error("mesh", "texCoords needs two values per vertex"));
                 }
-                mesh.tex_coords = Some(flat.chunks_exact(2).map(|c| [c[0], c[1]]).collect());
+                mesh.tex_coords = Some(flat.as_chunks::<2>().0.iter().map(|c| [c[0], c[1]]).collect());
             }
             if let Some(v) = map.get("indices").filter(|v| !v.is_null()) {
                 let flat = flat_numbers(v).map_err(|e| p.error("mesh", format!("indices: {e}")))?;

@@ -254,8 +254,10 @@ impl UniformBlock {
         if animated {
             if let Some(animation) = self.transitions.get_mut(name) {
                 let target: Vec<f32> = bytes
-                    .chunks_exact(4)
-                    .map(|b| f32::from_le_bytes([b[0], b[1], b[2], b[3]]))
+                    .as_chunks::<4>()
+                    .0
+                    .iter()
+                    .map(|b| f32::from_le_bytes(*b))
                     .collect();
                 let value = animation.advance(&target, self.time);
                 for (i, v) in value.iter().enumerate() {
