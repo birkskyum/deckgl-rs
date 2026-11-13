@@ -64,6 +64,14 @@
   }
 }
 
+/* Only deckgl has a picture: the others render nothing of their own, so there is no
+   honest one to show. Those cards use the full width instead of leaving a gap. */
+@media (min-width: 50rem) {
+  .crate-plain {
+    grid-template-columns: 1fr;
+  }
+}
+
 .crate img {
   border-radius: 0.375rem;
   width: 100%;

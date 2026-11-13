@@ -1,50 +1,10 @@
 ---
 title: visgl-rs
 description: A native implementation of the vis.gl stack for native hardware, in Rust on wgpu.
-template: splash
-hero:
-  tagline: |
-    The vis.gl stack for native hardware: Rust on wgpu, rendering with deck.gl's own WGSL
-    shaders and taking Apache Arrow and GeoArrow data directly.
-  image:
-    file: ../../assets/texture-render.png
-  actions:
-    - text: Gallery
-      link: /visgl-rs/gallery/
-      icon: right-arrow
-    - text: Design notes
-      link: /visgl-rs/docs/rust-port/
-      variant: minimal
-    - text: GitHub
-      link: https://github.com/birkskyum/visgl-rs
-      icon: external
-      variant: minimal
 ---
 
-import { Card, CardGrid } from '@astrojs/starlight/components'
-
-<CardGrid stagger>
-  <Card title="Every layer of deck.gl 9.4" icon="seti:image">
-    Scatterplot, line, path, arc, polygon, text, icon, column, point cloud and bitmap layers;
-    the aggregation layers with their scales; tiles, MVT, WMS, terrain and 3D Tiles; H3, S2, A5,
-    geohash and quadkey cells; glTF scenes and instanced meshes. All verified pixel by pixel in
-    headless GPU tests.
-  </Card>
-  <Card title="Columnar data, no conversion" icon="seti:db">
-    Arrow record batches with column, constant and function accessors. GeoArrow geometry in both
-    coordinate layouts, WKB, GeoParquet, FlatGeobuf, GeoJSON, CSV. Columns already in the GPU's
-    layout are handed over as they are, and a constant accessor uploads a single element.
-  </Card>
-  <Card title="Draws inside your renderer" icon="seti:config">
-    Render into a wgpu pass you own, or into textures you provide. Layers draw inside a
-    maplibre-native map, depth interleaved with its own 3D buildings, through a C API that also
-    takes Arrow tables without copying them.
-  </Card>
-  <Card title="The effects too" icon="star">
-    Lighting with per layer materials, shadows from directional lights, eighteen
-    post-processing passes, eight layer extensions, prop transitions, picking and highlighting.
-  </Card>
-</CardGrid>
+The vis.gl stack for native hardware: Rust on [wgpu](https://wgpu.rs), rendering with
+deck.gl's own WGSL shaders and taking Apache Arrow and GeoArrow data directly.
 
 ## The crates
 
@@ -53,27 +13,25 @@ it, so `mathgl` and `lumagl` are usable on their own.
 
 <div class="crate-stack">
   <a class="crate" href="/visgl-rs/api/deckgl/">
-    <img src="/visgl-rs/images/shadows.png" alt="A dense city of extruded polygons lit by a directional light, each block casting a shadow" />
+    <img src="/visgl-rs/images/texture-render.png" alt="The example scene: extruded polygons, arcs, paths, hexagons, icons, text and a heatmap over a dark basemap" />
     <div>
       <h3>deckgl</h3>
       <p class="ported-from">Port of deck.gl</p>
       <p><code>Deck</code>, <code>Layer</code> and <code>Viewport</code>, the <code>project</code> shader module, Arrow data accessors, and the render loop that draws into a pass you own. The layers themselves live in <code>deckgl-layers</code>.</p>
     </div>
   </a>
-  <a class="crate" href="/visgl-rs/api/lumagl/">
-    <img src="/visgl-rs/images/post-process.png" alt="Hexagon columns glowing against a dark background under a bloom and vignette pass" />
+  <a class="crate crate-plain" href="/visgl-rs/api/lumagl/">
     <div>
       <h3>lumagl</h3>
       <p class="ported-from">Port of luma.gl</p>
       <p>The rendering layer on wgpu: shader assembly from modules, uniform blocks, textures and samplers, <code>Model</code>, the post-processing passes, and headless device helpers.</p>
     </div>
   </a>
-  <a class="crate" href="/visgl-rs/api/mathgl/">
-    <img src="/visgl-rs/images/terrain.png" alt="A terrain mesh seen from a low pitched camera, receding to the horizon" />
+  <a class="crate crate-plain" href="/visgl-rs/api/mathgl/">
     <div>
       <h3>mathgl</h3>
       <p class="ported-from">Port of math.gl</p>
-      <p>Web Mercator projection and camera math in f64: viewports, view and projection matrices, and the coordinate systems every layer positions against.</p>
+      <p>Web Mercator projection and camera math in f64: viewports, view and projection matrices, and the coordinate systems every layer positions against. No rendering of its own.</p>
     </div>
   </a>
 </div>
