@@ -1,8 +1,9 @@
-# deckgl-rs
+# visgl-rs
 
-A native implementation of [deck.gl](https://deck.gl) for native hardware: Rust on
+A native implementation of the [vis.gl](https://vis.gl) stack for native hardware: Rust on
 [wgpu](https://wgpu.rs), rendering with deck.gl's own WGSL shaders and taking Apache Arrow
-and GeoArrow data directly.
+and GeoArrow data directly. The workspace holds `deckgl-rs`, `lumagl-rs` and `mathgl-rs`,
+ports of deck.gl, luma.gl and math.gl.
 
 ![The example scene: extruded polygons, arcs, paths, hexagons, icons, text and a heatmap](docs/images/texture-render.png)
 
@@ -20,9 +21,9 @@ described in [docs/cpp-prototype.md](docs/cpp-prototype.md).
 The Rust port in `crates/` is a fresh port of deck.gl 9 and is the active code base.
 
 The documentation and the gallery are on the
-[site](https://birkskyum.github.io/deckgl-rs/), built from `site/`. Planned work is
-tracked in the [roadmap issue](https://github.com/birkskyum/deckgl-rs/issues/75) and
-the [issue list](https://github.com/birkskyum/deckgl-rs/issues).
+[site](https://birkskyum.github.io/visgl-rs/), built from `site/`. Planned work is
+tracked in the [roadmap issue](https://github.com/birkskyum/visgl-rs/issues/75) and
+the [issue list](https://github.com/birkskyum/visgl-rs/issues).
 
 ## Gallery
 
@@ -88,7 +89,7 @@ PNG, logging goes through `tracing`, and criterion benchmarks cover the large la
 Not yet: point cloud (`pnts`) tiles in `Tile3DLayer`, draping layers over terrain (the other
 half of `TerrainExtension`), Python, Swift and Kotlin bindings, golden image comparisons
 against deck.gl JS, and published crates. See [docs/rust-port.md](docs/rust-port.md) for the
-design and the open decisions, and the [roadmap issue](https://github.com/birkskyum/deckgl-rs/issues/75)
+design and the open decisions, and the [roadmap issue](https://github.com/birkskyum/visgl-rs/issues/75)
 for what is planned.
 
 ![deckgl-rs arcs weaving through maplibre-native's 3D buildings](docs/images/maplibre-interleaved.png)

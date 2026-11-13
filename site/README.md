@@ -1,12 +1,12 @@
-# The deckgl-rs site
+# The visgl-rs site
 
 An [Astro](https://astro.build) and [Starlight](https://starlight.astro.build) site, published
-to <https://birkskyum.github.io/deckgl-rs/> by `.github/workflows/site.yml` whenever
+to <https://birkskyum.github.io/visgl-rs/> by `.github/workflows/site.yml` whenever
 `site/` or `docs/` changes on `main`.
 
 ```sh
 npm install
-npm run dev       # http://localhost:4321/deckgl-rs/
+npm run dev       # http://localhost:4321/visgl-rs/
 npm run build     # into dist/
 npm run preview   # serve what was built
 ```

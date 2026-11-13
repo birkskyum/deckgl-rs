@@ -47,10 +47,10 @@ for (const file of await readdir(docs)) {
     .replace(/\]\(images\//g, `](${base}/images/`)
     // Links between documents keep working
     .replace(/\]\(([a-z0-9-]+)\.md\)/g, `](${base}/docs/$1/)`)
-    .replace(/\]\(\.\.\/([A-Za-z0-9_.-]+)\)/g, '](https://github.com/birkskyum/deckgl-rs/blob/main/$1)')
+    .replace(/\]\(\.\.\/([A-Za-z0-9_.-]+)\)/g, '](https://github.com/birkskyum/visgl-rs/blob/main/$1)')
   const name = file.replace(/\.md$/, '')
   // The page is a copy, so send the edit link to the document it was copied from
-  const editUrl = `https://github.com/birkskyum/deckgl-rs/edit/main/docs/${file}`
+  const editUrl = `https://github.com/birkskyum/visgl-rs/edit/main/docs/${file}`
   const frontmatter =
     `---\ntitle: ${page.title}\neditUrl: ${editUrl}\nsidebar:\n  order: ${page.order}\n---\n\n`
   await writeFile(join(out, `${name}.md`), frontmatter + body)

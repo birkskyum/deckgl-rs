@@ -21,7 +21,7 @@ edition = "2021"
 rust-version = "1.94"
 license = "MIT OR Apache-2.0"
 authors = ["Birk Skyum"]
-repository = "https://github.com/birkskyum/deckgl-rs"
+repository = "https://github.com/birkskyum/visgl-rs"
 
 [workspace.dependencies]
 mathgl-rs = { path = "crates/mathgl-rs" }

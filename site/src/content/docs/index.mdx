@@ -1,5 +1,5 @@
 ---
-title: deckgl-rs
+title: visgl-rs
 description: A native implementation of deck.gl for native hardware, in Rust on wgpu.
 template: splash
 hero:
@@ -10,13 +10,13 @@ hero:
     file: ../../assets/texture-render.png
   actions:
     - text: Gallery
-      link: /deckgl-rs/gallery/
+      link: /visgl-rs/gallery/
       icon: right-arrow
     - text: Design notes
-      link: /deckgl-rs/docs/rust-port/
+      link: /visgl-rs/docs/rust-port/
       variant: minimal
     - text: GitHub
-      link: https://github.com/birkskyum/deckgl-rs
+      link: https://github.com/birkskyum/visgl-rs
       icon: external
       variant: minimal
 ---
@@ -49,8 +49,8 @@ import { Card, CardGrid } from '@astrojs/starlight/components'
 ## Getting started
 
 ```sh
-git clone https://github.com/birkskyum/deckgl-rs
-cd deckgl-rs
+git clone https://github.com/birkskyum/visgl-rs
+cd visgl-rs
 cargo run --release --bin window          # the example scene, in a window
 cargo run --release --bin json_render -- examples/json/shadows.json out.png
 ```
