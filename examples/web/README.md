@@ -1,4 +1,4 @@
-# deckgl-rs in a browser
+# deckgl in a browser
 
 The crates compiled to `wasm32-unknown-unknown`, drawing with wgpu through the browser's
 WebGPU, or through WebGL2 when built with the `webgl` feature. Same layers, same WGSL

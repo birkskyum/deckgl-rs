@@ -32,7 +32,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       # The API reference goes under /api, with an index that jumps into the main crate
-      - run: cargo doc --no-deps -p mathgl-rs -p lumagl-rs -p deckgl-rs -p deckgl-rs-layers -p deckgl-rs-json
+      - run: cargo doc --no-deps -p mathgl -p lumagl -p deckgl -p deckgl-layers -p deckgl-json
       - name: Put the API reference in the site
         run: |
           cp -r target/doc site/dist/api

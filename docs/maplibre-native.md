@@ -1,19 +1,19 @@
-# deckgl-rs inside maplibre-native
+# deckgl inside maplibre-native
 
-![deckgl-rs arcs weaving through maplibre-native's 3D buildings](images/maplibre-interleaved.png)
+![deckgl arcs weaving through maplibre-native's 3D buildings](images/maplibre-interleaved.png)
 
-*The maplibre-native GLFW demo app (Metal, OpenFreeMap Liberty style) with deckgl-rs arcs
+*The maplibre-native GLFW demo app (Metal, OpenFreeMap Liberty style) with deckgl arcs
 drawn into the same frame. The arcs share the map's depth buffer, so each one is hidden where
 it passes behind a building and visible where it clears one. The scene is
 `examples/json/maplibre-arcs.json`, shown with `DECKGL_JSON`.*
 
-This is the interleaved rendering path: maplibre-native draws the map, deckgl-rs draws its
+This is the interleaved rendering path: maplibre-native draws the map, deckgl draws its
 layers into the same drawable and depth texture, on the same Metal command queue, and the
 frame is presented once. No texture copies, no compositing pass.
 
 ## How it works
 
-`crates/deckgl-rs-ffi` builds `libdeckgl_ffi.a` with a small C API (`include/deckgl.h`):
+`crates/deckgl-ffi` builds `libdeckgl_ffi.a` with a small C API (`include/deckgl.h`):
 
 1. `deckgl_metal_create(id<MTLDevice>, id<MTLCommandQueue>)` creates a wgpu device on the
    host's Metal device through wgpu's hal layer, using the host's command queue. Everything
@@ -72,7 +72,7 @@ Environment variables read by the overlay:
 
 ## All-Rust host through maplibre-native-ffi
 
-![all-Rust demo: maplibre-native-ffi basemap with deckgl-rs layers](images/maplibre-ffi-overlay.png)
+![all-Rust demo: maplibre-native-ffi basemap with deckgl layers](images/maplibre-ffi-overlay.png)
 
 `examples/maplibre-ffi` is the same demo with no C++ at all. It uses the Rust bindings from
 [maplibre-native-ffi](https://github.com/maplibre/maplibre-native-ffi), whose build script
@@ -111,5 +111,5 @@ attaches the render session, renders and presents.
 - The same C API is the basis for iOS (`MLNMapView` custom layers) and for the Vulkan backend
   on Android, where wgpu's Vulkan hal offers the same raw-handle imports.
 - With the WebGPU backends of maplibre-native (Dawn or wgpu-native), deck could share the
-  `WGPUDevice` directly. That path needs deckgl-rs to be built against `webgpu.h`
+  `WGPUDevice` directly. That path needs deckgl to be built against `webgpu.h`
   instead of the `wgpu` crate, which is a separate decision.

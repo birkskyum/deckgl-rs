@@ -1,6 +1,6 @@
 #pragma once
 
-// deckgl-rs overlay for the GLFW demo app (Metal backend).
+// deckgl overlay for the GLFW demo app (Metal backend).
 //
 // The map frame is committed first, then deck.gl layers are drawn into the same drawable and
 // depth texture on the same command queue, then the drawable is presented.

@@ -6,7 +6,7 @@ index 68a1328a53ba..af29ad8ca04a 100644
      )
  endif()
  
-+option(MLN_DECKGL_OVERLAY "Draw a deckgl-rs overlay in the GLFW app (Metal backend only)" OFF)
++option(MLN_DECKGL_OVERLAY "Draw a deckgl overlay in the GLFW app (Metal backend only)" OFF)
 +if(MLN_DECKGL_OVERLAY)
 +    if(NOT MLN_WITH_METAL)
 +        message(FATAL_ERROR "MLN_DECKGL_OVERLAY requires MLN_WITH_METAL")

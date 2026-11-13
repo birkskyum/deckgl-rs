@@ -8,7 +8,7 @@ These instructions were written for Linux, where the key binding is CTRL+SHIFT+P
 On Mac OSX it's probably something like COMMAND+SHIFT+P.
 
 * Install the "C/C++" and "CMake Tools" extensions, both from Microsoft.
-* Open the deckgl-rs folder and accept the suggestions.
+* Open the deck.gl-native folder and accept the suggestions.
 * CTRL+SHIFT+P "CMake: Scan for kits"
 * CTRL+SHIFT+P "CMake: Edit User-Local CMake Kits"
 * Add a kit based on the highest version of Clang already present:

@@ -1,12 +1,12 @@
 [workspace]
 resolver = "2"
 members = [
-  "crates/mathgl-rs",
-  "crates/lumagl-rs",
-  "crates/deckgl-rs",
-  "crates/deckgl-rs-layers",
-  "crates/deckgl-rs-json",
-  "crates/deckgl-rs-ffi",
+  "crates/mathgl",
+  "crates/lumagl",
+  "crates/deckgl",
+  "crates/deckgl-layers",
+  "crates/deckgl-json",
+  "crates/deckgl-ffi",
   "examples",
 ]
 # Standalone crates, built on their own:
@@ -24,11 +24,11 @@ authors = ["Birk Skyum"]
 repository = "https://github.com/birkskyum/visgl-rs"
 
 [workspace.dependencies]
-mathgl-rs = { path = "crates/mathgl-rs" }
-lumagl-rs = { path = "crates/lumagl-rs" }
-deckgl-rs = { path = "crates/deckgl-rs" }
-deckgl-rs-layers = { path = "crates/deckgl-rs-layers" }
-deckgl-rs-json = { path = "crates/deckgl-rs-json" }
+mathgl = { path = "crates/mathgl" }
+lumagl = { path = "crates/lumagl" }
+deckgl = { path = "crates/deckgl" }
+deckgl-layers = { path = "crates/deckgl-layers" }
+deckgl-json = { path = "crates/deckgl-json" }
 
 wgpu = "30"
 naga = { version = "30", features = ["wgsl-in", "glsl-out"] }

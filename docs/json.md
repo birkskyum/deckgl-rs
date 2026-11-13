@@ -1,6 +1,6 @@
 # JSON descriptions
 
-`deckgl-rs-json` reads the JSON format of [`@deck.gl/json`](https://deck.gl/docs/api-reference/json/overview)
+`deckgl-json` reads the JSON format of [`@deck.gl/json`](https://deck.gl/docs/api-reference/json/overview)
 and [pydeck](https://pydeck.gl): a description with `initialViewState` and `layers`, where each
 layer names its class with `@@type` and uses deck.gl's camelCase props. Descriptions written for
 deck.gl's JSON playground or exported from pydeck work unchanged as long as the layers exist here.
@@ -83,7 +83,7 @@ they are, and every other layer sees one row per feature with `geometry` and `pr
 for its accessors (`"getPosition": "@@=geometry.coordinates"`). Geometries are decoded from
 WKB, with Z and M coordinates and EWKB SRIDs accepted. A Parquet file without GeoParquet
 metadata is an Arrow table, read with `@@column:` accessors like the named tables below. The
-`parquet` and `flatgeobuf` cargo features of `deckgl-rs-json` (on by default) provide this.
+`parquet` and `flatgeobuf` cargo features of `deckgl-json` (on by default) provide this.
 
 A geometry column of multi geometries (`geoarrow.multipoint`, `geoarrow.multilinestring`,
 `geoarrow.multipolygon`, or WKB holding them) becomes one row per part, as
@@ -96,7 +96,7 @@ row.
 Large data should not go through JSON. A converter can carry named Arrow record batches, and
 a layer uses one with `"data": "@@table:<name>"`. Accessors on table data name columns:
 `"@@column:geometry"`, or just `"@@=geometry"`; expressions are not evaluated over tables.
-Column types follow `deckgl-rs`'s Arrow accessors: positions are `FixedSizeList<f64, 2 | 3>`,
+Column types follow `deckgl`'s Arrow accessors: positions are `FixedSizeList<f64, 2 | 3>`,
 colours `FixedSizeList<u8, 3 | 4>`, numbers any numeric type, strings `Utf8`.
 
 ```rust

@@ -3,7 +3,7 @@
 
 [package]
 name = "deckgl-web"
-description = "deckgl-rs in a browser: a wasm module that draws layers from a JSON description"
+description = "deckgl in a browser: a wasm module that draws layers from a JSON description"
 version = "0.1.0"
 edition = "2021"
 rust-version = "1.94"
@@ -16,9 +16,9 @@ publish = false
 crate-type = ["cdylib"]
 
 [dependencies]
-deckgl-rs = { path = "../../crates/deckgl-rs", default-features = false }
-deckgl-rs-layers = { path = "../../crates/deckgl-rs-layers", default-features = false, features = ["fetch"] }
-deckgl-rs-json = { path = "../../crates/deckgl-rs-json", default-features = false, features = ["fetch"] }
+deckgl = { path = "../../crates/deckgl", default-features = false }
+deckgl-layers = { path = "../../crates/deckgl-layers", default-features = false, features = ["fetch"] }
+deckgl-json = { path = "../../crates/deckgl-json", default-features = false, features = ["fetch"] }
 wgpu = "30"
 wasm-bindgen = "0.2"
 wasm-bindgen-futures = "0.4"
@@ -38,7 +38,7 @@ features = [
 [features]
 default = []
 # Draw with WebGL2 instead of WebGPU, for the maplibre-gl-js custom layer.
-webgl = ["deckgl-rs/webgl", "deckgl-rs-layers/webgl", "deckgl-rs-json/webgl", "wgpu/webgl"]
+webgl = ["deckgl/webgl", "deckgl-layers/webgl", "deckgl-json/webgl", "wgpu/webgl"]
 
 [profile.release]
 opt-level = "s"

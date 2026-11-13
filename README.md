@@ -2,7 +2,7 @@
 
 A native implementation of the [vis.gl](https://vis.gl) stack for native hardware: Rust on
 [wgpu](https://wgpu.rs), rendering with deck.gl's own WGSL shaders and taking Apache Arrow
-and GeoArrow data directly. The workspace holds `deckgl-rs`, `lumagl-rs` and `mathgl-rs`,
+and GeoArrow data directly. The workspace holds `deckgl`, `lumagl` and `mathgl`,
 ports of deck.gl, luma.gl and math.gl.
 
 ![The example scene: extruded polygons, arcs, paths, hexagons, icons, text and a heatmap](docs/images/texture-render.png)
@@ -92,9 +92,9 @@ against deck.gl JS, and published crates. See [docs/rust-port.md](docs/rust-port
 design and the open decisions, and the [roadmap issue](https://github.com/birkskyum/visgl-rs/issues/75)
 for what is planned.
 
-![deckgl-rs arcs weaving through maplibre-native's 3D buildings](docs/images/maplibre-interleaved.png)
+![deckgl arcs weaving through maplibre-native's 3D buildings](docs/images/maplibre-interleaved.png)
 
-*Depth interleaved: deckgl-rs arcs and maplibre-native's own extruded buildings in one
+*Depth interleaved: deckgl arcs and maplibre-native's own extruded buildings in one
 frame, sharing a depth buffer, so the arcs pass behind the towers they go under. This is
 maplibre-native's GLFW app on Metal, drawing `examples/json/maplibre-arcs.json` through the C
 API. See [docs/maplibre-native.md](docs/maplibre-native.md).*
@@ -102,7 +102,7 @@ API. See [docs/maplibre-native.md](docs/maplibre-native.md).*
 ## Performance
 
 Measured on an Apple M series laptop, release build, including reading the 1024 x 1024 frame
-back to the CPU; `cargo bench -p deckgl-rs-layers --bench layers` and
+back to the CPU; `cargo bench -p deckgl-layers --bench layers` and
 [docs/benchmarks.md](docs/benchmarks.md) have the full table and the method.
 
 | | Upload | Frame |
@@ -123,16 +123,16 @@ hundred small layers initialize in 165 ms rather than 384 ms.
 
 | Crate | JavaScript counterpart | Contents |
 | --- | --- | --- |
-| `mathgl-rs` | `@math.gl/web-mercator` | Web Mercator projection and camera math, f64 |
-| `lumagl-rs` | `@luma.gl/core`, `@luma.gl/shadertools` | Shader assembly, uniform blocks, textures, `Model`, headless device helpers |
-| `deckgl-rs` | `@deck.gl/core` | `Deck`, `Layer`, `Viewport`, the `project` shader module, Arrow data accessors |
-| `deckgl-rs-layers` | `@deck.gl/layers`, `@deck.gl/aggregation-layers`, `@deck.gl/geo-layers`, `@deck.gl/mesh-layers` | `ScatterplotLayer`, `LineLayer`, `SolidPolygonLayer`, `PathLayer`, `ArcLayer`, `BitmapLayer`, `IconLayer`, `TextLayer`, `ColumnLayer`, `GridCellLayer`, `PointCloudLayer`, `PolygonLayer`, `GeoJsonLayer`, `HexagonLayer`, `GridLayer`, `ScreenGridLayer`, `TripsLayer`, `GreatCircleLayer`, `SimpleMeshLayer`, `ScenegraphLayer` |
-| `deckgl-rs-json` | `@deck.gl/json` | JSON descriptions (pydeck format) with expression accessors |
-| `deckgl-rs-ffi` | `@deck.gl/mapbox` | C API (`libdeckgl_ffi.a`) for host renderers; Metal device and texture interop; JSON layers |
+| `mathgl` | `@math.gl/web-mercator` | Web Mercator projection and camera math, f64 |
+| `lumagl` | `@luma.gl/core`, `@luma.gl/shadertools` | Shader assembly, uniform blocks, textures, `Model`, headless device helpers |
+| `deckgl` | `@deck.gl/core` | `Deck`, `Layer`, `Viewport`, the `project` shader module, Arrow data accessors |
+| `deckgl-layers` | `@deck.gl/layers`, `@deck.gl/aggregation-layers`, `@deck.gl/geo-layers`, `@deck.gl/mesh-layers` | `ScatterplotLayer`, `LineLayer`, `SolidPolygonLayer`, `PathLayer`, `ArcLayer`, `BitmapLayer`, `IconLayer`, `TextLayer`, `ColumnLayer`, `GridCellLayer`, `PointCloudLayer`, `PolygonLayer`, `GeoJsonLayer`, `HexagonLayer`, `GridLayer`, `ScreenGridLayer`, `TripsLayer`, `GreatCircleLayer`, `SimpleMeshLayer`, `ScenegraphLayer` |
+| `deckgl-json` | `@deck.gl/json` | JSON descriptions (pydeck format) with expression accessors |
+| `deckgl-ffi` | `@deck.gl/mapbox` | C API (`libdeckgl_ffi.a`) for host renderers; Metal device and texture interop; JSON layers |
 | `deckgl-examples` | | Example binaries |
 
 The core crates also build for `wasm32-unknown-unknown` against wgpu's WebGPU backend, which
-CI checks on every push: `cargo build --target wasm32-unknown-unknown -p deckgl-rs` and, for the
+CI checks on every push: `cargo build --target wasm32-unknown-unknown -p deckgl` and, for the
 layer and JSON crates, `--no-default-features` to leave out the parts with no wasm build
 (`fetch`, which pulls ring through ureq, and `s2-cells`). The browser is deck.gl JS's home,
 so this is a compile check rather than a supported target.

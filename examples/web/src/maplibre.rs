@@ -20,7 +20,7 @@ use web_sys::WebGl2RenderingContext;
 
 use crate::err;
 
-/// deckgl-rs drawing inside a maplibre-gl-js map, in the map's own WebGL2 context.
+/// deckgl drawing inside a maplibre-gl-js map, in the map's own WebGL2 context.
 #[wasm_bindgen]
 pub struct DeckGlOverlay {
     device: wgpu::Device,
@@ -55,7 +55,7 @@ pub async fn create_overlay(gl: WebGl2RenderingContext) -> Result<DeckGlOverlay,
     let adapter = unsafe { instance.create_adapter_from_hal(exposed) };
     let (device, queue) = adapter
         .request_device(&wgpu::DeviceDescriptor {
-            label: Some("deckgl-rs in maplibre-gl-js"),
+            label: Some("deckgl in maplibre-gl-js"),
             required_limits: adapter.limits(),
             ..Default::default()
         })

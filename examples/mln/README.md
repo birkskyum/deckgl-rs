@@ -1,4 +1,4 @@
-# deckgl-rs on mln-rs
+# deckgl on mln-rs
 
 deck layers drawn into a [mln-rs](https://github.com/louwers/mln-rs) basemap: one wgpu
 device, one texture, all Rust.

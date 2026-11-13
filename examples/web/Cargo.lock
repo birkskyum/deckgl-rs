@@ -385,7 +385,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "deckgl-rs"
+name = "deckgl"
 version = "0.1.0"
 dependencies = [
  "arrow-array",
@@ -394,8 +394,8 @@ dependencies = [
  "arrow-select",
  "bytemuck",
  "glam",
- "lumagl-rs",
- "mathgl-rs",
+ "lumagl",
+ "mathgl",
  "rayon",
  "serde_json",
  "thiserror",
@@ -405,13 +405,13 @@ dependencies = [
 ]
 
 [[package]]
-name = "deckgl-rs-json"
+name = "deckgl-json"
 version = "0.1.0"
 dependencies = [
  "arrow-array",
  "csv",
- "deckgl-rs",
- "deckgl-rs-layers",
+ "deckgl",
+ "deckgl-layers",
  "glam",
  "image",
  "serde_json",
@@ -421,14 +421,14 @@ dependencies = [
 ]
 
 [[package]]
-name = "deckgl-rs-layers"
+name = "deckgl-layers"
 version = "0.1.0"
 dependencies = [
  "a5",
  "arrow-array",
  "base64 0.22.1",
  "bytemuck",
- "deckgl-rs",
+ "deckgl",
  "earcutr",
  "flate2",
  "fontdue",
@@ -437,8 +437,8 @@ dependencies = [
  "h3o",
  "image",
  "js-sys",
- "lumagl-rs",
- "mathgl-rs",
+ "lumagl",
+ "mathgl",
  "serde_json",
  "thiserror",
  "tracing",
@@ -455,9 +455,9 @@ name = "deckgl-web"
 version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
- "deckgl-rs",
- "deckgl-rs-json",
- "deckgl-rs-layers",
+ "deckgl",
+ "deckgl-json",
+ "deckgl-layers",
  "js-sys",
  "serde_json",
  "wasm-bindgen",
@@ -1076,7 +1076,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f9f8bd3e56ce4dfc153cf470fffbfa98c7620958b312ca5c3a4b8d5181fd13c6"
 
 [[package]]
-name = "lumagl-rs"
+name = "lumagl"
 version = "0.1.0"
 dependencies = [
  "bytemuck",
@@ -1091,7 +1091,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "mathgl-rs"
+name = "mathgl"
 version = "0.1.0"
 dependencies = [
  "glam",

@@ -5,8 +5,8 @@ into the layer shaders at fixed hooks and by adding shader modules, attributes a
 deck.gl's GLSL hooks (`DECKGL_FILTER_SIZE`, `DECKGL_FILTER_GL_POSITION`, `DECKGL_FILTER_COLOR`)
 rely on `inout` parameters, function overloading and a preprocessor, none of which WGSL has,
 and deck.gl JS does not support hooks in its WGSL path yet. The native port therefore defines
-its own WGSL convention. It is implemented by the shader assembler in `lumagl-rs`
-(`crates/lumagl-rs/src/shader.rs`) and by `deckgl::extension`.
+its own WGSL convention. It is implemented by the shader assembler in `lumagl`
+(`crates/lumagl/src/shader.rs`) and by `deckgl::extension`.
 
 ## The hooks
 

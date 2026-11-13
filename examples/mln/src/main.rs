@@ -1,4 +1,4 @@
-//! deckgl-rs layers drawn into an mln-rs basemap, all in Rust on one wgpu device.
+//! deckgl layers drawn into an mln-rs basemap, all in Rust on one wgpu device.
 //!
 //! The maplibre-ffi demo next door does the same thing across a C ABI: maplibre-native
 //! renders through Metal, wgpu-hal adopts its `MTLDevice`, and an Objective-C++ shim
@@ -103,7 +103,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let instance = wgpu::Instance::new(wgpu::InstanceDescriptor::new_without_display_handle());
     let adapter = pollster::block_on(instance.request_adapter(&wgpu::RequestAdapterOptions::default()))?;
     let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor {
-        label: Some("deckgl-rs + mln-rs"),
+        label: Some("deckgl + mln-rs"),
         ..Default::default()
     }))?;
     println!("adapter: {:?}", adapter.get_info().name);

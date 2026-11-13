@@ -58,7 +58,7 @@ impl State {
         }))
         .expect("adapter");
         let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor {
-            label: Some("deckgl-rs window"),
+            label: Some("deckgl window"),
             ..Default::default()
         }))
         .expect("device");
@@ -430,7 +430,7 @@ impl ApplicationHandler for App {
             return;
         }
         let attributes = Window::default_attributes()
-            .with_title("deckgl-rs")
+            .with_title("deckgl")
             .with_inner_size(winit::dpi::LogicalSize::new(1024, 768));
         let window = Arc::new(event_loop.create_window(attributes).expect("window"));
         self.state = Some(State::new(window));

@@ -1,6 +1,6 @@
 # Style Guide
 
-### **deckgl-rs** follows [Google C++ Style Guide]([https://google.github.io/styleguide/cppguide.html](https://google.github.io/styleguide/cppguide.html)) with a few notable updates:
+### **deck.gl-native** follows [Google C++ Style Guide]([https://google.github.io/styleguide/cppguide.html](https://google.github.io/styleguide/cppguide.html)) with a few notable updates:
 
 - [Trailing Return Syntax](https://google.github.io/styleguide/cppguide.html#trailing_return) - we make use of trailing return syntax across the board
 - [Exceptions](https://google.github.io/styleguide/cppguide.html#Exceptions) - our code is exception-tolerant, so it is encouraged to use exceptions wherever it is appropriate. Top-level API provides exception-safe implementations for core functionality

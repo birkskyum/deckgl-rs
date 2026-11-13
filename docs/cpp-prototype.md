@@ -12,7 +12,7 @@ and does not build on current toolchains.
 This is an open-source C++ implementation of deck.gl.
 
 > This project is no longer active. It was an experiment to understand what it would take to build a native version of deck.gl. 
-> There are discussions about restarting a deckgl-rs effort (this time probably in Rust instead of C++) to help us integrate more non-JavaScript code, better support mobile platforms, and collaborate better with basemaps like maplibre-gl. 
+> There are discussions about restarting a deck.gl-native effort (this time probably in Rust instead of C++) to help us integrate more non-JavaScript code, better support mobile platforms, and collaborate better with basemaps like maplibre-gl. 
 > If you have more than a passing interest in this topic you are welcome to join us at https://www.openvisualization.org/#get-involved.
 
 <br />
@@ -42,7 +42,7 @@ This is an open-source C++ implementation of deck.gl.
   </tbody>
 </table>
 
-This project targeted a minimal, proof-of-concept prototype. This initial `deckgl-rs` release is unlikely to meet the requirements of most applications. 
+This project targeted a minimal, proof-of-concept prototype. This initial `deck.gl-native` release is unlikely to meet the requirements of most applications. 
 
 ## Scope
 
@@ -51,7 +51,7 @@ This project targeted a minimal, proof-of-concept prototype. This initial `deckg
 - Layers: Only `ScatterplotLayer`, `LineLayer`, `SolidPolygonLayer`
 - Tables: Only Apache Arrow tables will be supported, apps will need to use Arrow libraries if data is not already in Arrow format.
 - loader support will be limited to CSV and line-delimited JSON.
-- iOS only: will only be tested on iOS (no serious attempts will be done to make deckgl-rs work on other platforms).
+- iOS only: will only be tested on iOS (no serious attempts will be done to make deck.gl-native work on other platforms).
 
 
 ## Not Planned
@@ -90,7 +90,7 @@ To get oriented on the deck.gl software architecture:
 
 ### API Design Principles and Cross-Platform Concerns
 
-A primary concern for the deckgl-rs port, especially once it matures, is how to keep it develop in sync with the various implementations and variants of the deck.gl API, such as the core JavaScript codebase, the pydeck Python API etc.
+A primary concern for the deck.gl-native port, especially once it matures, is how to keep it develop in sync with the various implementations and variants of the deck.gl API, such as the core JavaScript codebase, the pydeck Python API etc.
 
 Currently the two main guidelines are:
 
@@ -103,7 +103,7 @@ Top-level API also includes exception-less counterparts for core functionality a
 
 ### C++ Module Structure
 
-The deckgl-rs code bases exposes a set of C++ "module header files" following a `<framework>/<module>.h` structure. 
+The deck.gl-native code bases exposes a set of C++ "module header files" following a `<framework>/<module>.h` structure. 
 
 | Module            | Description |
 | --- | --- |
@@ -135,12 +135,12 @@ CSV and JSON table loaders are provided as part of the deck.gl library. To suppo
 
 ### Graphics Backend: dawn/WebGPU
 
-deckgl-rs is being built on top of the C++ WebGPU API using the [dawn](https://dawn.googlesource.com/dawn) framework.
+deck.gl-native is being built on top of the C++ WebGPU API using the [dawn](https://dawn.googlesource.com/dawn) framework.
 
 The dawn framework is a compelling choice for deck.gl:
 
 - The JavaScript version of deck.gl will inevitably move from WebGL to WebGPU, so having both C++ and JavaScript work against a common 3D API will signficantly increase the ease of aligning the JavaScript and C++ code bases.
-- The Dawn project has the ambition to provide backends on basically all platforms/rendering APIs of interest, including Vulkan, Metal, D3D12, and OpenGL. Ideally meaning that deckgl-rs itself will only have to implement a single backend, namely dawn.
+- The Dawn project has the ambition to provide backends on basically all platforms/rendering APIs of interest, including Vulkan, Metal, D3D12, and OpenGL. Ideally meaning that deck.gl-native itself will only have to implement a single backend, namely dawn.
 
 Note that Dawn is still a work in progress (with different levels of support for different platforms - the prototype is only being tested on iOS) and there is some risk with this technology choice. However, given the momentum behind WebGPU in browsers, we feel that the prospects are currently looking good.
 

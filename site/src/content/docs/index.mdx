@@ -49,21 +49,21 @@ import { Card, CardGrid } from '@astrojs/starlight/components'
 ## The crates
 
 Three crates in one workspace, one per vis.gl library. Each depends only on the ones below
-it, so `mathgl-rs` and `lumagl-rs` are usable on their own.
+it, so `mathgl` and `lumagl` are usable on their own.
 
 <div class="crate-stack">
   <a class="crate" href="/visgl-rs/api/deckgl/">
     <img src="/visgl-rs/images/shadows.png" alt="A dense city of extruded polygons lit by a directional light, each block casting a shadow" />
     <div>
-      <h3>deckgl-rs</h3>
+      <h3>deckgl</h3>
       <p class="ported-from">Port of deck.gl</p>
-      <p><code>Deck</code>, <code>Layer</code> and <code>Viewport</code>, the <code>project</code> shader module, Arrow data accessors, and the render loop that draws into a pass you own. The layers themselves live in <code>deckgl-rs-layers</code>.</p>
+      <p><code>Deck</code>, <code>Layer</code> and <code>Viewport</code>, the <code>project</code> shader module, Arrow data accessors, and the render loop that draws into a pass you own. The layers themselves live in <code>deckgl-layers</code>.</p>
     </div>
   </a>
   <a class="crate" href="/visgl-rs/api/lumagl/">
     <img src="/visgl-rs/images/post-process.png" alt="Hexagon columns glowing against a dark background under a bloom and vignette pass" />
     <div>
-      <h3>lumagl-rs</h3>
+      <h3>lumagl</h3>
       <p class="ported-from">Port of luma.gl</p>
       <p>The rendering layer on wgpu: shader assembly from modules, uniform blocks, textures and samplers, <code>Model</code>, the post-processing passes, and headless device helpers.</p>
     </div>
@@ -71,14 +71,14 @@ it, so `mathgl-rs` and `lumagl-rs` are usable on their own.
   <a class="crate" href="/visgl-rs/api/mathgl/">
     <img src="/visgl-rs/images/terrain.png" alt="A terrain mesh seen from a low pitched camera, receding to the horizon" />
     <div>
-      <h3>mathgl-rs</h3>
+      <h3>mathgl</h3>
       <p class="ported-from">Port of math.gl</p>
       <p>Web Mercator projection and camera math in f64: viewports, view and projection matrices, and the coordinate systems every layer positions against.</p>
     </div>
   </a>
 </div>
 
-The layer catalogue and the JSON API live in `deckgl-rs-layers` and `deckgl-rs-json`, in the
+The layer catalogue and the JSON API live in `deckgl-layers` and `deckgl-json`, in the
 [full API reference](/visgl-rs/api/).
 
 ## Getting started

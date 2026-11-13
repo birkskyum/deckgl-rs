@@ -1,6 +1,6 @@
 ---
 title: Gallery
-description: Scenes rendered by deckgl-rs, each one a JSON description in the repository.
+description: Scenes rendered by deckgl, each one a JSON description in the repository.
 ---
 
 export const url = (path) => `${import.meta.env.BASE_URL.replace(/\/$/, '')}/${path}`
@@ -50,11 +50,11 @@ regenerated from the repository, so they show what the current code draws.
 <div class="hero-shot">
   <img
     src={image('maplibre-interleaved.png')}
-    alt="deckgl-rs arcs weaving through maplibre-native's 3D buildings"
+    alt="deckgl arcs weaving through maplibre-native's 3D buildings"
   />
 </div>
 
-Depth interleaved rendering: deckgl-rs arcs and maplibre-native's own extruded buildings
+Depth interleaved rendering: deckgl arcs and maplibre-native's own extruded buildings
 in one frame, sharing a depth buffer, so each arc is hidden where it passes behind a tower and
 visible where it clears one. This is maplibre-native's GLFW app on Metal, drawing
 `examples/json/maplibre-arcs.json` through the C API. See

@@ -194,7 +194,7 @@ async function run() {
       report(result, `radius ${radius} m`, how + (i === 0 ? '  (first, includes setup)' : ''))
     }
     log('')
-    log('  deckgl-rs, same file, same radii, `load_race --hexbin 200`:')
+    log('  deckgl, same file, same radii, `load_race --hexbin 200`:')
     log('    radius 200 m         183 ms   (first, includes pipeline setup)')
     log('    radius 100 m          81 ms')
     log('    radius 400 m          65 ms')
@@ -223,7 +223,7 @@ async function run() {
       report(result, `round ${round + 1}`, round === 0 ? '  (first, includes setup)' : '')
     }
     log('')
-    log('  deckgl-rs, same file, `load_race /tmp/poly500k.arrow`:')
+    log('  deckgl, same file, `load_race /tmp/poly500k.arrow`:')
     log('    read                  20 ms   file into an Arrow record batch')
     log('    upload               279 ms   tessellation, GPU buffers, first draw')
   }

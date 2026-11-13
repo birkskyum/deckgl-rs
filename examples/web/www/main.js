@@ -131,7 +131,7 @@ async function main() {
       return
     }
     const warnings = deck.warnings
-    say(warnings.length ? warnings.join('; ') : `${file} drawn by deckgl-rs`)
+    say(warnings.length ? warnings.join('; ') : `${file} drawn by deckgl`)
     invalidate()
   }
 

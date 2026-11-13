@@ -1,4 +1,4 @@
-//! deckgl-rs in a browser.
+//! deckgl in a browser.
 //!
 //! The same layers, shaders and projection math as the native build, compiled to wasm32 and
 //! drawing through wgpu. On WebGPU it owns a canvas; with the `webgl` feature it draws
@@ -75,7 +75,7 @@ pub async fn create(canvas: HtmlCanvasElement) -> Result<DeckGl, JsValue> {
         .map_err(|_| err("no GPU adapter: this browser has neither WebGPU nor WebGL2"))?;
     let (device, queue) = adapter
         .request_device(&wgpu::DeviceDescriptor {
-            label: Some("deckgl-rs"),
+            label: Some("deckgl"),
             // The browser's own limits, so a WebGL2 device is not asked for more than it has
             required_limits: adapter.limits(),
             ..Default::default()

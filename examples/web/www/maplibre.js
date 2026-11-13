@@ -1,4 +1,4 @@
-// deckgl-rs as a maplibre-gl-js custom layer: the map hands its WebGL2 context to wgpu,
+// deckgl as a maplibre-gl-js custom layer: the map hands its WebGL2 context to wgpu,
 // which draws the layers into the framebuffer and depth buffer the map is already using.
 // MapLibre GL JS 6 is ESM only and WebGL2 only, which is what this layer wants anyway.
 // MapLibre's own ESM build, not a rebundled one: its worker only starts from this file.
@@ -32,13 +32,13 @@ const deckLayer = {
   renderingMode: '3d',
   onAdd(map, gl) {
     this.map = map
-    say('starting deckgl-rs in the map’s WebGL2 context')
+    say('starting deckgl in the map’s WebGL2 context')
     create_overlay(gl)
       .then((overlay) => {
         overlay.set_spec(spec)
         this.overlay = overlay
         const warnings = overlay.warnings
-        say(warnings.length ? warnings.join('; ') : 'arcs drawn by deckgl-rs')
+        say(warnings.length ? warnings.join('; ') : 'arcs drawn by deckgl')
         map.triggerRepaint()
       })
       .catch((error) => say(String(error), true))

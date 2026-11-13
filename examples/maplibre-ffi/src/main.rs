@@ -1,4 +1,4 @@
-//! deckgl-rs on a maplibre-native map, all in Rust.
+//! deckgl on a maplibre-native map, all in Rust.
 //!
 //! wgpu owns the window and a color texture. Each frame maplibre-native renders the map into
 //! that texture through maplibre-native-ffi's caller-owned Metal texture target, deck draws its
@@ -399,7 +399,7 @@ impl State {
             ..Default::default()
         }))?;
         let (device, queue) = pollster::block_on(adapter.request_device(&wgpu::DeviceDescriptor {
-            label: Some("deckgl-rs maplibre demo"),
+            label: Some("deckgl maplibre demo"),
             ..Default::default()
         }))?;
         let mut config = surface
@@ -435,7 +435,7 @@ impl State {
             .attach_ref
             .attach_metal_borrowed_texture(&attachments.borrowed_descriptor(size)?)?;
 
-        // deckgl-rs on the same wgpu device
+        // deckgl on the same wgpu device
         let deck = Deck::new(
             &device,
             &queue,
@@ -688,7 +688,7 @@ impl ApplicationHandler for App {
             return;
         }
         let attributes = Window::default_attributes()
-            .with_title("deckgl-rs + maplibre-native-ffi")
+            .with_title("deckgl + maplibre-native-ffi")
             .with_inner_size(winit::dpi::LogicalSize::new(1024, 768));
         let window = match event_loop.create_window(attributes) {
             Ok(window) => Arc::new(window),
