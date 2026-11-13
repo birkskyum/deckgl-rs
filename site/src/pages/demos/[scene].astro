@@ -1,0 +1,77 @@
+---
+// One page per live scene: the scene drawn over an mln-rs basemap, as large as the window
+// allows. The gallery links here rather than running anything itself.
+import StarlightPage from '@astrojs/starlight/components/StarlightPage.astro'
+import { scenes } from '../../scenes.js'
+
+export function getStaticPaths() {
+  return scenes.map((scene) => ({ params: { scene: scene.slug }, props: scene }))
+}
+
+const { slug, title, text, poster, alt } = Astro.props
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+---
+
+<StarlightPage
+  frontmatter={{
+    title,
+    description: `${text} Drawn live over an mln-rs basemap, on WebGPU.`,
+    template: 'splash',
+    tableOfContents: false,
+  }}
+>
+  <p class="demo-lead">
+    {text} Drawn live on WebGPU over an{' '}
+    <a href="https://github.com/louwers/mln-rs">mln-rs</a>{' '}basemap, sharing one GPU
+    device and one frame with it, so deck's geometry is hidden where it passes behind the
+    map's buildings.
+  </p>
+
+  <div class="demo-stage" data-scene={slug}>
+    <canvas hidden></canvas>
+    <img class="demo-poster" src={`${base}/images/${poster}`} alt={alt} />
+    <p class="demo-status">loading the module, about 9 MB</p>
+  </div>
+
+  <p class="demo-controls">
+    <label>
+      <input type="checkbox" class="demo-interleave" checked />
+      Depth tested against the map
+    </label>
+    <a href={`${base}/gallery/`}>Back to the gallery</a>
+  </p>
+</StarlightPage>
+
+<script>
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+  const stage = document.querySelector<HTMLElement>('.demo-stage')
+
+  if (stage) {
+    const scene = stage.dataset.scene!
+    const canvas = stage.querySelector('canvas')!
+    const poster = stage.querySelector<HTMLElement>('.demo-poster')!
+    const status = stage.querySelector<HTMLElement>('.demo-status')!
+    const interleave = document.querySelector<HTMLInputElement>('.demo-interleave')!
+
+    ;(async () => {
+      try {
+        const { run, supported } = await import(/* @vite-ignore */ `${base}/live/demo.js`)
+        if (!supported()) {
+          status.textContent =
+            'This browser has no WebGPU, so the picture stays a picture. Chrome, Edge and Safari 26 have it.'
+          return
+        }
+        status.textContent = 'loading the map'
+        const demo = await run(canvas, `${base}/live/scenes/${scene}.json`)
+        // The poster stays until there is something to replace it with.
+        poster.hidden = true
+        canvas.hidden = false
+        status.textContent = 'live: deck layers over an mln-rs basemap'
+        interleave.addEventListener('change', () => demo.set_interleave(interleave.checked))
+      } catch (error) {
+        status.textContent = String(error)
+        console.error(error)
+      }
+    })()
+  }
+</script>

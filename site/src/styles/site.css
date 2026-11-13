@@ -97,68 +97,55 @@
   color: var(--sl-color-gray-2);
 }
 
-/* A gallery picture that runs: the still until it is asked for, then a live canvas. */
-.live-run {
+/* The gallery's pictures open the live page for that scene. */
+.gallery figure a {
   display: block;
-  width: 100%;
-  padding: 0;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  position: relative;
-  border-radius: 0.5rem;
-  overflow: hidden;
-}
-
-.live-run img {
-  display: block;
-  width: 100%;
   border-radius: 0.5rem;
 }
 
-.live-badge {
-  position: absolute;
-  right: 0.6rem;
-  bottom: 0.6rem;
-  padding: 0.25rem 0.6rem;
-  border-radius: 999px;
-  font-size: var(--sl-text-xs);
-  background: var(--sl-color-accent);
-  color: var(--sl-color-white);
+.gallery figure a img {
+  transition: opacity 0.15s ease;
 }
 
-.live-run:hover .live-badge,
-.live-run:focus-visible .live-badge {
-  background: var(--sl-color-accent-high);
+.gallery figure a:hover img,
+.gallery figure a:focus-visible img {
+  opacity: 0.82;
 }
 
-.live-stage {
-  position: relative;
+/* A live demo page: the scene as large as the window allows. */
+.demo-lead {
+  color: var(--sl-color-gray-2);
 }
 
-.live-stage canvas {
+.demo-stage {
+  margin-block: 1.5rem;
+}
+
+.demo-stage canvas,
+.demo-poster {
   display: block;
   width: 100%;
-  aspect-ratio: 5 / 3;
+  aspect-ratio: 16 / 9;
+  max-height: 72vh;
+  object-fit: cover;
   border-radius: 0.5rem;
   background: var(--sl-color-gray-6);
 }
 
-.live-status {
-  margin: 0.4rem 0 0;
-  color: var(--sl-color-gray-3);
-  font-size: var(--sl-text-xs);
+.demo-stage canvas[hidden],
+.demo-poster[hidden] {
+  display: none;
 }
 
-.live-close {
-  position: absolute;
-  right: 0.6rem;
-  top: 0.6rem;
-  padding: 0.25rem 0.6rem;
-  border: 1px solid var(--sl-color-gray-5);
-  border-radius: 999px;
-  font-size: var(--sl-text-xs);
-  background: var(--sl-color-black);
-  color: var(--sl-color-white);
-  cursor: pointer;
+.demo-status {
+  margin: 0.5rem 0 0;
+  color: var(--sl-color-gray-3);
+  font-size: var(--sl-text-sm);
+}
+
+.demo-controls {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  flex-wrap: wrap;
 }

@@ -27,4 +27,4 @@ pnpm-debug.log*
 src/content/docs/docs/
 public/images/
 src/assets/
-public/demos/
+public/live/

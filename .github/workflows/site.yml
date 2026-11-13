@@ -39,7 +39,7 @@ jobs:
       - run: sudo apt-get update && sudo apt-get install -y binaryen
       # Into site/public, so `npm run build` copies it into dist. It has to run first.
       - name: Build the live demos
-        run: ./build.sh ../../site/public/demos
+        run: ./build.sh ../../site/public/live
         working-directory: examples/web-mln
       - run: npm ci
         working-directory: site
