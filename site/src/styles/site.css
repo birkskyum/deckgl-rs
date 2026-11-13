@@ -96,3 +96,69 @@
   margin: 0;
   color: var(--sl-color-gray-2);
 }
+
+/* A gallery picture that runs: the still until it is asked for, then a live canvas. */
+.live-run {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  position: relative;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.live-run img {
+  display: block;
+  width: 100%;
+  border-radius: 0.5rem;
+}
+
+.live-badge {
+  position: absolute;
+  right: 0.6rem;
+  bottom: 0.6rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  font-size: var(--sl-text-xs);
+  background: var(--sl-color-accent);
+  color: var(--sl-color-white);
+}
+
+.live-run:hover .live-badge,
+.live-run:focus-visible .live-badge {
+  background: var(--sl-color-accent-high);
+}
+
+.live-stage {
+  position: relative;
+}
+
+.live-stage canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 5 / 3;
+  border-radius: 0.5rem;
+  background: var(--sl-color-gray-6);
+}
+
+.live-status {
+  margin: 0.4rem 0 0;
+  color: var(--sl-color-gray-3);
+  font-size: var(--sl-text-xs);
+}
+
+.live-close {
+  position: absolute;
+  right: 0.6rem;
+  top: 0.6rem;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--sl-color-gray-5);
+  border-radius: 999px;
+  font-size: var(--sl-text-xs);
+  background: var(--sl-color-black);
+  color: var(--sl-color-white);
+  cursor: pointer;
+}

@@ -1,0 +1,80 @@
+---
+// A gallery picture that becomes the running thing it is a picture of: the same scene
+// drawn live over an mln-rs basemap, on WebGPU, by examples/web-mln.
+//
+// The module is 8.6 MB, so nothing is fetched until someone asks for it, and only one
+// demo runs at a time: each holds its own GPU device and fetches its own tiles.
+interface Props {
+  /** A scene in examples/json, as build.sh copied it into demos/scenes. */
+  scene: string
+  /** The still of that scene in docs/images, shown until it is running. */
+  poster: string
+  alt: string
+}
+const { scene, poster, alt } = Astro.props
+const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+---
+
+<figure class="live-scene" data-scene={scene}>
+  <button type="button" class="live-run" aria-label={`Run ${scene} live over a basemap`}>
+    <img src={`${base}/images/${poster}`} alt={alt} />
+    <span class="live-badge">Run live</span>
+  </button>
+  <figcaption><slot /></figcaption>
+</figure>
+
+<script>
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+  let running: { stop: () => void; figure: HTMLElement } | null = null
+
+  function stopRunning() {
+    if (!running) return
+    running.stop()
+    running.figure.querySelector('.live-stage')?.remove()
+    running.figure.querySelector<HTMLElement>('.live-run')?.removeAttribute('hidden')
+    running = null
+  }
+
+  document.addEventListener('click', async (event) => {
+    const target = event.target as HTMLElement
+    if (target.closest('.live-close')) {
+      stopRunning()
+      return
+    }
+    const button = target.closest<HTMLElement>('.live-run')
+    if (!button) return
+
+    const figure = button.closest<HTMLElement>('.live-scene')
+    const scene = figure?.dataset.scene
+    if (!figure || !scene) return
+
+    // One at a time: a second map would want its own device and its own tiles.
+    stopRunning()
+
+    const stage = document.createElement('div')
+    stage.className = 'live-stage'
+    stage.innerHTML =
+      '<canvas></canvas><p class="live-status">starting</p>' +
+      '<button type="button" class="live-close" aria-label="Stop and show the picture again">Stop</button>'
+    button.setAttribute('hidden', '')
+    figure.prepend(stage)
+
+    const canvas = stage.querySelector('canvas')!
+    const status = stage.querySelector<HTMLElement>('.live-status')!
+
+    try {
+      const { run, supported } = await import(/* @vite-ignore */ `${base}/demos/demo.js`)
+      if (!supported()) {
+        status.textContent = 'This browser has no WebGPU. Chrome or Edge 113 and later have it.'
+        return
+      }
+      status.textContent = 'loading the map'
+      const demo = await run(canvas, `${base}/demos/scenes/${scene}.json`)
+      running = { stop: demo.stop, figure }
+      status.textContent = 'deck layers over an mln-rs basemap, interleaved'
+    } catch (error) {
+      status.textContent = String(error)
+      console.error(error)
+    }
+  })
+</script>

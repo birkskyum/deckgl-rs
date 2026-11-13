@@ -3,12 +3,56 @@ title: Gallery
 description: Scenes rendered by deckgl, each one a JSON description in the repository.
 ---
 
+import LiveScene from '../../components/LiveScene.astro'
+
 export const url = (path) => `${import.meta.env.BASE_URL.replace(/\/$/, '')}/${path}`
 export const image = (name) => url(`images/${name}`)
 
 Every picture here is a JSON description in `examples/json/`, rendered headless with
 `cargo run --release --bin json_render -- examples/json/<name>.json out.png`. They are
 regenerated from the repository, so they show what the current code draws.
+
+## Running, over a basemap
+
+These eight are placed at real coordinates, so a basemap underneath them means something.
+Click one and it stops being a picture: the same scene draws live on WebGPU, over a
+[mln-rs](https://github.com/louwers/mln-rs) basemap, sharing one GPU device and one frame
+with it. deck's geometry is depth tested against the map's own buildings, so it is hidden
+where it passes behind one.
+
+They need a browser with WebGPU, and the module is 8.6 MB, so nothing is fetched until you
+ask for it and only one runs at a time.
+
+<div class="gallery">
+  <LiveScene scene="san-francisco" poster="san-francisco.png" alt="Arcs and extruded blocks over San Francisco">
+    Arcs, a `ScatterplotLayer` and labels across the city.
+  </LiveScene>
+  <LiveScene scene="vancouver-blocks" poster="geojson-vancouver.png" alt="Vancouver blocks from GeoJSON">
+    `GeoJsonLayer`: 4,600 extruded blocks read from GeoJSON.
+  </LiveScene>
+  <LiveScene scene="maplibre-arcs" poster="maplibre-arcs.png" alt="Arcs weaving between downtown towers">
+    The arcs that weave between the basemap's towers, which is where the depth sharing shows.
+  </LiveScene>
+  <LiveScene scene="heathrow-flights" poster="json-heathrow-flights.png" alt="Flight paths out of Heathrow">
+    `LineLayer`: a day of departures from Heathrow.
+  </LiveScene>
+  <LiveScene scene="shadows" poster="shadows.png" alt="Extruded blocks casting shadows">
+    Shadow maps from a low sun over Vancouver's extruded blocks.
+  </LiveScene>
+  <LiveScene scene="data-filter" poster="data-filter.png" alt="Points filtered on the GPU">
+    `DataFilterExtension`: points dropped on the GPU rather than rebuilt on the CPU.
+  </LiveScene>
+  <LiveScene scene="osm-tiles" poster="osm-tiles.png" alt="Raster tiles of Copenhagen">
+    `TileLayer`: a frustum culled quadtree loading raster tiles in the background.
+  </LiveScene>
+  <LiveScene scene="terrain" poster="terrain.png" alt="Terrain from elevation tiles">
+    `TerrainLayer`: elevation tiles triangulated with Martini, lit by a directional light.
+  </LiveScene>
+</div>
+
+## Stills
+
+These two draw their own world rather than a place, so there is nothing for a basemap to add.
 
 <div class="gallery">
   <figure>
@@ -18,30 +62,10 @@ regenerated from the repository, so they show what the current code draws.
     </figcaption>
   </figure>
   <figure>
-    <img src={image('terrain.png')} alt="Terrain from elevation tiles" />
-    <figcaption>
-      `TerrainLayer`: elevation tiles triangulated with Martini, lit by a directional light.
-    </figcaption>
-  </figure>
-  <figure>
-    <img src={image('shadows.png')} alt="Extruded blocks casting shadows" />
-    <figcaption>Shadow maps from a low sun over Vancouver's extruded blocks.</figcaption>
-  </figure>
-  <figure>
     <img src={image('post-process.png')} alt="Hexagon aggregation with a vignette" />
     <figcaption>
       `HexagonLayer` under two `PostProcessEffect` passes, a vignette and a saturation boost.
     </figcaption>
-  </figure>
-  <figure>
-    <img src={image('osm-tiles.png')} alt="Raster tiles of Copenhagen" />
-    <figcaption>
-      `TileLayer`: a frustum culled quadtree loading raster tiles in the background.
-    </figcaption>
-  </figure>
-  <figure>
-    <img src={image('geojson-vancouver.png')} alt="Vancouver blocks from GeoJSON" />
-    <figcaption>`GeoJsonLayer`: 4,600 extruded blocks read from GeoJSON.</figcaption>
   </figure>
 </div>
 

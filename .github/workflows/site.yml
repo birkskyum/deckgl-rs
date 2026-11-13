@@ -7,6 +7,8 @@ on:
       - 'site/**'
       - 'docs/**'
       - 'crates/**'
+      - 'examples/web-mln/**'
+      - 'examples/json/**'
       - '.github/workflows/site.yml'
   workflow_dispatch:
 
@@ -25,12 +27,24 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: site/package-lock.json
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+      # The CLI has to be the exact version of the crate mln-rs pins, and wasm-opt
+      # takes the module from 12 MB to 8.6 MB.
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: wasm-bindgen@0.2.130
+      - run: sudo apt-get update && sudo apt-get install -y binaryen
+      # Into site/public, so `npm run build` copies it into dist. It has to run first.
+      - name: Build the live demos
+        run: ./build.sh ../../site/public/demos
+        working-directory: examples/web-mln
       - run: npm ci
         working-directory: site
       - run: npm run build
         working-directory: site
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: Swatinem/rust-cache@v2
       # The API reference goes under /api, with an index that jumps into the main crate
       - run: cargo doc --no-deps -p mathgl -p lumagl -p deckgl -p deckgl-layers -p deckgl-json
       - name: Put the API reference in the site
