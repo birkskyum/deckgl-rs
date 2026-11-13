@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>visgl-rs on mln-rs</title>
+    <style>
+      :root { color-scheme: dark; font-family: system-ui, sans-serif; }
+      body { margin: 0; background: #14161a; color: #e6e8ec; }
+      header { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; padding: 1rem; }
+      select, label { font: inherit; }
+      #stage { position: relative; width: 100vw; height: calc(100vh - 4.5rem); }
+      canvas { width: 100%; height: 100%; display: block; }
+      #status { position: absolute; left: 1rem; bottom: 1rem; background: #0009; padding: .4rem .7rem; border-radius: .4rem; font-size: .85rem; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <label>Scene
+        <select id="scene">
+          <option value="san-francisco">san-francisco</option>
+          <option value="vancouver-blocks">vancouver-blocks</option>
+          <option value="maplibre-arcs">maplibre-arcs</option>
+          <option value="heathrow-flights">heathrow-flights</option>
+          <option value="shadows">shadows</option>
+          <option value="data-filter">data-filter</option>
+          <option value="osm-tiles">osm-tiles</option>
+          <option value="terrain">terrain</option>
+        </select>
+      </label>
+      <label><input type="checkbox" id="interleave" checked /> Interleaved with the map's depth</label>
+    </header>
+    <div id="stage">
+      <canvas id="canvas"></canvas>
+      <div id="status">starting</div>
+    </div>
+    <script type="module">
+      import { run, supported } from './demo.js'
+      const status = document.getElementById('status')
+      const canvas = document.getElementById('canvas')
+      const picker = document.getElementById('scene')
+      const interleave = document.getElementById('interleave')
+      let demo = null
+
+      async function start() {
+        if (!supported()) { status.textContent = 'This browser has no WebGPU.'; return }
+        demo?.stop()
+        status.textContent = `loading ${picker.value}`
+        try {
+          demo = await run(canvas, `./scenes/${picker.value}.json`, { interleave: interleave.checked })
+          status.textContent = `${picker.value}, ${interleave.checked ? 'interleaved' : 'on top'}`
+        } catch (error) {
+          status.textContent = String(error)
+          console.error(error)
+        }
+      }
+      picker.onchange = start
+      interleave.onchange = () => { demo?.set_interleave(interleave.checked); status.textContent = `${picker.value}, ${interleave.checked ? 'interleaved' : 'on top'}` }
+      start()
+    </script>
+  </body>
+</html>

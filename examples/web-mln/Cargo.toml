@@ -1,0 +1,51 @@
+# Its own workspace: a wasm32 cdylib, and mln-rs needs a newer MSRV than this
+# repository's. mln-rs comes from crates.io, so this needs no sibling checkout,
+# unlike examples/mln, which tracks work that is not released yet.
+[workspace]
+
+[package]
+name = "visgl-web-mln"
+description = "deck layers over an mln-rs basemap in the browser, on WebGPU"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.98"
+license = "MIT OR Apache-2.0"
+authors = ["Birk Skyum"]
+repository = "https://github.com/birkskyum/visgl-rs"
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+deckgl = { path = "../../crates/deckgl", default-features = false }
+deckgl-layers = { path = "../../crates/deckgl-layers", default-features = false, features = ["fetch"] }
+deckgl-json = { path = "../../crates/deckgl-json", default-features = false, features = ["fetch"] }
+wgpu = "30"
+wasm-bindgen = "=0.2.130"
+wasm-bindgen-futures = "0.4"
+js-sys = "0.3"
+console_error_panic_hook = "0.1"
+
+# The individual crates, not the mln-rs facade: the facade pulls in
+# mln-rs-storage-offline, whose rusqlite will not link for wasm. This is the set
+# mln-rs's own browser example uses.
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+mln-rs-actor = "0.0.11"
+mln-rs-gfx = "0.0.11"
+mln-rs-map = "0.0.11"
+mln-rs-renderer = "0.0.11"
+# default-features off: its `sqlite` feature is on by default and rusqlite has
+# no C to link against for wasm. mln-rs turns it off the same way.
+mln-rs-storage = { version = "0.0.11", default-features = false }
+mln-rs-text = "0.0.11"
+mln-rs-util = "0.0.11"
+mln-rs-webgpu = "0.0.11"
+
+[dependencies.web-sys]
+version = "0.3"
+features = ["HtmlCanvasElement", "OffscreenCanvas", "Window", "console"]
+
+[profile.release]
+opt-level = "s"
+lto = true

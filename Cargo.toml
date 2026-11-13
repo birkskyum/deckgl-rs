@@ -13,7 +13,8 @@ members = [
 # - maplibre-ffi needs the native MapLibre library and a sibling maplibre-native-ffi checkout
 # - web is a wasm32 cdylib, built by examples/web/build.sh
 # - mln needs a checkout of https://github.com/louwers/mln-rs next to this repository
-exclude = ["examples/maplibre-ffi", "examples/web", "examples/mln"]
+# - web-mln is a wasm32 cdylib built by examples/web-mln/build.sh
+exclude = ["examples/maplibre-ffi", "examples/web", "examples/mln", "examples/web-mln"]
 
 [workspace.package]
 version = "0.1.0"
