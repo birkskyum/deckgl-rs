@@ -1,11 +1,11 @@
 ---
 title: visgl-rs
-description: A native implementation of deck.gl for native hardware, in Rust on wgpu.
+description: A native implementation of the vis.gl stack for native hardware, in Rust on wgpu.
 template: splash
 hero:
   tagline: |
-    deck.gl for native hardware: Rust on wgpu, rendering with deck.gl's own WGSL shaders and
-    taking Apache Arrow and GeoArrow data directly.
+    The vis.gl stack for native hardware: Rust on wgpu, rendering with deck.gl's own WGSL
+    shaders and taking Apache Arrow and GeoArrow data directly.
   image:
     file: ../../assets/texture-render.png
   actions:
@@ -21,7 +21,7 @@ hero:
       variant: minimal
 ---
 
-import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components'
+import { Card, CardGrid } from '@astrojs/starlight/components'
 
 <CardGrid stagger>
   <Card title="Every layer of deck.gl 9.4" icon="seti:image">
@@ -48,26 +48,35 @@ import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components'
 
 ## The crates
 
-Three crates in one workspace, mirroring the three vis.gl libraries they are ported from.
-Each builds on the one above it.
+Three crates in one workspace, one per vis.gl library. Each depends only on the ones below
+it, so `mathgl-rs` and `lumagl-rs` are usable on their own.
 
-<CardGrid>
-  <LinkCard
-    title="mathgl-rs"
-    href="/visgl-rs/api/mathgl/"
-    description="Port of math.gl. Web Mercator projection and camera math in f64: viewports, view and projection matrices, and the coordinate systems the layers position against."
-  />
-  <LinkCard
-    title="lumagl-rs"
-    href="/visgl-rs/api/lumagl/"
-    description="Port of luma.gl. The rendering layer on wgpu: shader assembly from modules, uniform blocks, textures and samplers, Model, and headless device helpers."
-  />
-  <LinkCard
-    title="deckgl-rs"
-    href="/visgl-rs/api/deckgl/"
-    description="Port of deck.gl. Deck, Layer and Viewport, the project shader module, Arrow data accessors, and the render loop that draws into a pass you own."
-  />
-</CardGrid>
+<div class="crate-stack">
+  <a class="crate" href="/visgl-rs/api/deckgl/">
+    <img src="/visgl-rs/images/shadows.png" alt="A dense city of extruded polygons lit by a directional light, each block casting a shadow" />
+    <div>
+      <h3>deckgl-rs</h3>
+      <p class="ported-from">Port of deck.gl</p>
+      <p><code>Deck</code>, <code>Layer</code> and <code>Viewport</code>, the <code>project</code> shader module, Arrow data accessors, and the render loop that draws into a pass you own. The layers themselves live in <code>deckgl-rs-layers</code>.</p>
+    </div>
+  </a>
+  <a class="crate" href="/visgl-rs/api/lumagl/">
+    <img src="/visgl-rs/images/post-process.png" alt="Hexagon columns glowing against a dark background under a bloom and vignette pass" />
+    <div>
+      <h3>lumagl-rs</h3>
+      <p class="ported-from">Port of luma.gl</p>
+      <p>The rendering layer on wgpu: shader assembly from modules, uniform blocks, textures and samplers, <code>Model</code>, the post-processing passes, and headless device helpers.</p>
+    </div>
+  </a>
+  <a class="crate" href="/visgl-rs/api/mathgl/">
+    <img src="/visgl-rs/images/terrain.png" alt="A terrain mesh seen from a low pitched camera, receding to the horizon" />
+    <div>
+      <h3>mathgl-rs</h3>
+      <p class="ported-from">Port of math.gl</p>
+      <p>Web Mercator projection and camera math in f64: viewports, view and projection matrices, and the coordinate systems every layer positions against.</p>
+    </div>
+  </a>
+</div>
 
 The layer catalogue and the JSON API live in `deckgl-rs-layers` and `deckgl-rs-json`, in the
 [full API reference](/visgl-rs/api/).
